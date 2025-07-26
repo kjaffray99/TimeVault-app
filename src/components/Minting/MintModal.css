@@ -1,0 +1,616 @@
+/**
+ * MintModal Styles - Premium Transaction Interface
+ * 
+ * Luxury design optimized for conversions and customer experience:
+ * - High-contrast accessibility (WCAG 4.5:1)
+ * - Mobile-responsive design
+ * - Smooth animations for premium feel
+ * - Dark mode support for extended sessions
+ * - Loading states and visual feedback
+ */
+
+/* Modal Overlay */
+.mint-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 1rem;
+    animation: mint-modal-fade-in 0.3s ease-out;
+}
+
+/* Modal Container */
+.mint-modal {
+    background: white;
+    border-radius: 16px;
+    max-width: 600px;
+    width: 100%;
+    max-height: 90vh;
+    overflow: hidden;
+    box-shadow:
+        0 25px 50px rgba(0, 0, 0, 0.3),
+        0 10px 25px rgba(0, 0, 0, 0.2);
+    animation: mint-modal-slide-up 0.3s ease-out;
+    border: 2px solid var(--accent-gold);
+}
+
+/* Header */
+.mint-modal__header {
+    padding: 1.5rem;
+    border-bottom: 2px solid #f3f4f6;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    position: relative;
+}
+
+.mint-modal__header-content {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+}
+
+.mint-modal__asset-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 12px;
+    object-fit: cover;
+    border: 2px solid var(--accent-gold);
+    flex-shrink: 0;
+}
+
+.mint-modal__asset-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.mint-modal__title {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary-navy);
+    line-height: 1.2;
+}
+
+.mint-modal__description {
+    margin: 0 0 0.75rem 0;
+    color: #6b7280;
+    font-size: 0.875rem;
+    line-height: 1.4;
+}
+
+.mint-modal__type-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    background: var(--accent-gold);
+    color: var(--primary-navy);
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.mint-modal__close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    padding: 0.5rem;
+    cursor: pointer;
+    border-radius: 8px;
+    color: #6b7280;
+    transition: all 0.2s ease;
+}
+
+.mint-modal__close:hover:not(:disabled) {
+    background: #f3f4f6;
+    color: var(--primary-navy);
+}
+
+.mint-modal__close:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Content */
+.mint-modal__content {
+    padding: 1.5rem;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+/* Sections */
+.mint-modal__section {
+    margin-bottom: 2rem;
+}
+
+.mint-modal__section:last-child {
+    margin-bottom: 0;
+}
+
+.mint-modal__section h3 {
+    margin: 0 0 1rem 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--primary-navy);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.mint-modal__section--warning {
+    background: #fef3cd;
+    border: 1px solid #f59e0b;
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+.mint-modal__section--warning h3 {
+    color: #92400e;
+}
+
+/* Benefits List */
+.mint-modal__benefits-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.mint-modal__benefit-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0;
+    font-size: 0.875rem;
+    color: #374151;
+}
+
+.mint-modal__benefit-icon {
+    color: var(--accent-gold);
+    flex-shrink: 0;
+}
+
+/* Chart */
+.mint-modal__chart {
+    background: #f8fafc;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 0.5rem;
+}
+
+.mint-modal__chart-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
+    color: #6b7280;
+    font-size: 0.875rem;
+}
+
+/* Transaction Details */
+.mint-modal__details {
+    background: #f8fafc;
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+.mint-modal__detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #e5e7eb;
+    font-size: 0.875rem;
+}
+
+.mint-modal__detail-row:last-child {
+    border-bottom: none;
+}
+
+.mint-modal__detail-row--total {
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--primary-navy);
+    border-top: 2px solid var(--accent-gold);
+    margin-top: 0.5rem;
+    padding-top: 0.75rem;
+}
+
+/* Requirements */
+.mint-modal__requirements-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.mint-modal__requirements-list li {
+    padding: 0.25rem 0;
+    font-size: 0.875rem;
+    color: #92400e;
+    position: relative;
+    padding-left: 1.5rem;
+}
+
+.mint-modal__requirements-list li:before {
+    content: '!';
+    position: absolute;
+    left: 0;
+    color: #f59e0b;
+    font-weight: bold;
+    width: 16px;
+    height: 16px;
+    background: #fbbf24;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+}
+
+/* Step States */
+.mint-modal__confirm,
+.mint-modal__minting,
+.mint-modal__success,
+.mint-modal__error {
+    text-align: center;
+    padding: 2rem 1rem;
+}
+
+.mint-modal__confirm-icon,
+.mint-modal__success-icon,
+.mint-modal__error-icon {
+    margin: 0 auto 1rem auto;
+    color: var(--accent-gold);
+}
+
+.mint-modal__success-icon {
+    color: #10b981;
+}
+
+.mint-modal__error-icon {
+    color: #ef4444;
+}
+
+.mint-modal__loading-spinner {
+    width: 64px;
+    height: 64px;
+    border: 4px solid #e5e7eb;
+    border-top: 4px solid var(--accent-gold);
+    border-radius: 50%;
+    animation: mint-spin 1s linear infinite;
+    margin: 0 auto 1rem auto;
+}
+
+.mint-modal__confirm h3,
+.mint-modal__minting h3,
+.mint-modal__success h3,
+.mint-modal__error h3 {
+    margin: 0 0 1rem 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary-navy);
+}
+
+.mint-modal__confirm p,
+.mint-modal__minting p,
+.mint-modal__success p,
+.mint-modal__error p {
+    margin: 0 0 1.5rem 0;
+    color: #6b7280;
+    line-height: 1.5;
+}
+
+.mint-modal__confirm-details {
+    background: #f8fafc;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 1rem;
+    font-size: 0.875rem;
+    color: var(--primary-navy);
+}
+
+.mint-modal__minting-note {
+    background: #fef3cd;
+    border: 1px solid #f59e0b;
+    border-radius: 8px;
+    padding: 0.75rem;
+    font-size: 0.875rem;
+    color: #92400e;
+    margin-top: 1rem;
+}
+
+/* Transaction Info */
+.mint-modal__transaction-info {
+    background: #f0f9ff;
+    border: 1px solid #0ea5e9;
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 1rem 0;
+    text-align: left;
+}
+
+.mint-modal__transaction-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.25rem 0;
+    font-size: 0.875rem;
+}
+
+.mint-modal__transaction-hash {
+    background: #e5e7eb;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-family: 'Monaco', 'Menlo', monospace;
+    font-size: 0.75rem;
+}
+
+.mint-modal__status-confirmed {
+    color: #10b981;
+    font-weight: 600;
+}
+
+/* Error */
+.mint-modal__error-message {
+    background: #fef2f2;
+    border: 1px solid #f87171;
+    border-radius: 8px;
+    padding: 1rem;
+    color: #dc2626;
+    font-size: 0.875rem;
+    margin: 1rem 0;
+}
+
+/* Action Buttons */
+.mint-modal__success-actions,
+.mint-modal__error-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1.5rem;
+}
+
+/* Footer */
+.mint-modal__footer {
+    padding: 1.5rem;
+    border-top: 2px solid #f3f4f6;
+    background: #f8fafc;
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+}
+
+/* Button Styles */
+.mint-modal__button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-height: 44px;
+    border: 2px solid transparent;
+}
+
+.mint-modal__button--primary {
+    background: var(--primary-navy);
+    color: white;
+    border-color: var(--primary-navy);
+}
+
+.mint-modal__button--primary:hover:not(:disabled) {
+    background: #002a5c;
+    transform: translateY(-1px);
+}
+
+.mint-modal__button--secondary {
+    background: var(--accent-gold);
+    color: var(--primary-navy);
+    border-color: var(--accent-gold);
+}
+
+.mint-modal__button--secondary:hover:not(:disabled) {
+    background: #e6c547;
+    transform: translateY(-1px);
+}
+
+.mint-modal__button--outline {
+    background: transparent;
+    color: var(--primary-navy);
+    border-color: var(--primary-navy);
+}
+
+.mint-modal__button--outline:hover:not(:disabled) {
+    background: var(--primary-navy);
+    color: white;
+}
+
+.mint-modal__button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Animations */
+@keyframes mint-modal-fade-in {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes mint-modal-slide-up {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes mint-spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    .mint-modal {
+        background: #1f2937;
+        border-color: var(--accent-gold);
+    }
+
+    .mint-modal__header {
+        background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
+        border-bottom-color: #374151;
+    }
+
+    .mint-modal__title {
+        color: white;
+    }
+
+    .mint-modal__description {
+        color: #d1d5db;
+    }
+
+    .mint-modal__close {
+        color: #d1d5db;
+    }
+
+    .mint-modal__close:hover:not(:disabled) {
+        background: #374151;
+        color: white;
+    }
+
+    .mint-modal__section h3 {
+        color: white;
+    }
+
+    .mint-modal__benefit-item {
+        color: #d1d5db;
+    }
+
+    .mint-modal__details,
+    .mint-modal__chart {
+        background: #374151;
+    }
+
+    .mint-modal__confirm h3,
+    .mint-modal__minting h3,
+    .mint-modal__success h3,
+    .mint-modal__error h3 {
+        color: white;
+    }
+
+    .mint-modal__confirm p,
+    .mint-modal__minting p,
+    .mint-modal__success p,
+    .mint-modal__error p {
+        color: #d1d5db;
+    }
+
+    .mint-modal__footer {
+        background: #374151;
+        border-top-color: #4b5563;
+    }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .mint-modal-overlay {
+        padding: 0.5rem;
+    }
+
+    .mint-modal {
+        max-width: 100%;
+        max-height: 95vh;
+    }
+
+    .mint-modal__header {
+        padding: 1rem;
+    }
+
+    .mint-modal__header-content {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .mint-modal__asset-image {
+        width: 60px;
+        height: 60px;
+    }
+
+    .mint-modal__title {
+        font-size: 1.25rem;
+    }
+
+    .mint-modal__content {
+        padding: 1rem;
+    }
+
+    .mint-modal__footer {
+        padding: 1rem;
+        flex-direction: column;
+    }
+
+    .mint-modal__success-actions,
+    .mint-modal__error-actions {
+        flex-direction: column;
+    }
+
+    .mint-modal__button {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+    .mint-modal {
+        border-width: 3px;
+    }
+
+    .mint-modal__button {
+        border-width: 3px;
+    }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+
+    .mint-modal-overlay,
+    .mint-modal,
+    .mint-modal__loading-spinner,
+    .mint-modal__button {
+        animation: none;
+        transition: none;
+    }
+
+    .mint-modal__button:hover:not(:disabled) {
+        transform: none;
+    }
+}

@@ -1,0 +1,315 @@
+import React, { useEffect, useMemo, useState } from 'react';
+import { Calculator as CalculatorIcon, RefreshCw, TrendingDown, TrendingUp } from 'lucide-react';
+import { CryptoPriceService, MetalsPriceService } from '../../services/api';
+import type { ConversionResult, CryptoAsset, PreciousMetalPrice, UserWage } from '../../types';
+import './Calculator.css';
+
+interface CalculatorProps {
+  className?: string;
+}
+
+const Calculator: React.FC<CalculatorProps> = ({ className = '' }) => {
+  const [cryptoAssets, setCryptoAssets] = useState<CryptoAsset[]>([]);
+  const [metalPrices, setMetalPrices] = useState<PreciousMetalPrice[]>([]);
+  const [selectedAsset, setSelectedAsset] = useState<CryptoAsset | null>(null);
+  const [amount, setAmount] = useState<string>('1');
+  const [userWage, setUserWage] = useState<UserWage>({
+    hourlyRate: 25,
+    currency: 'USD',
+  });
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
+
+  // Load initial data
+  useEffect(() => {
+    loadMarketData();
+  }, []);
+
+  const loadMarketData = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+
+      const [cryptos, metals] = await Promise.all([
+        CryptoPriceService.getCryptoPrices(),
+        MetalsPriceService.getMetalsPrices(),
+      ]);
+
+      setCryptoAssets(cryptos);
+      setMetalPrices(metals);
+
+      // Set Bitcoin as default if available
+      if (cryptos.length > 0 && !selectedAsset) {
+        const btc = cryptos.find(crypto => crypto.id === 'bitcoin');
+        setSelectedAsset(btc || cryptos[0]);
+      }
+
+      setLastUpdated(new Date());
+    } catch (err) {
+      setError('Failed to load market data. Please try again.');
+      console.error('Market data loading error:', err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Calculate conversion results
+  const conversionResult = useMemo((): ConversionResult | null => {
+    if (!selectedAsset || !amount || isNaN(Number(amount))) {
+      return null;
+    }
+
+    const inputAmount = Number(amount);
+    const totalFiatValue = selectedAsset.price * inputAmount;
+
+    const goldPrice = metalPrices.find((m: PreciousMetalPrice) => m.metal === 'gold')?.price || 2050;
+    const silverPrice = metalPrices.find((m: PreciousMetalPrice) => m.metal === 'silver')?.price || 24;
+
+    const goldOunces = totalFiatValue / goldPrice;
+    const silverOunces = totalFiatValue / silverPrice;
+
+    const totalHours = totalFiatValue / userWage.hourlyRate;
+    const days = totalHours / 8; // Assuming 8-hour work days
+    const weeks = days / 5; // Assuming 5-day work weeks
+
+    return {
+      inputAmount,
+      inputAsset: selectedAsset,
+      goldOunces,
+      silverOunces,
+      timeEquivalent: {
+        hours: totalHours,
+        days,
+        weeks,
+      },
+      fiatValue: totalFiatValue,
+    };
+  }, [selectedAsset, amount, metalPrices, userWage.hourlyRate]);
+
+  const formatCurrency = (value: number, currency = 'USD') => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency,
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(value);
+  };
+
+  const formatNumber = (value: number, decimals = 2) => {
+    return new Intl.NumberFormat('en-US', {
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals,
+    }).format(value);
+  };
+
+  const formatTime = (hours: number): string => {
+    if (hours < 1) {
+      return `${Math.round(hours * 60)} minutes`;
+    } else if (hours < 24) {
+      return `${formatNumber(hours, 1)} hours`;
+    } else if (hours < 168) {
+      return `${formatNumber(hours / 24, 1)} days`;
+    } else {
+      return `${formatNumber(hours / 168, 1)} weeks`;
+    }
+  };
+
+  return (
+    <div className={`calculator ${className}`}>
+      <div className="calculator-header">
+        <div className="calculator-title">
+          <CalculatorIcon className="title-icon" />
+          <h2>TimeVault Calculator</h2>
+        </div>
+        <button
+          className="btn btn-ghost btn-sm refresh-btn"
+          onClick={loadMarketData}
+          disabled={isLoading}
+          aria-label="Refresh market data"
+        >
+          <RefreshCw className={`icon ${isLoading ? 'spinning' : ''}`} />
+          Refresh
+        </button>
+      </div>
+
+      {error && (
+        <div className="error-message" role="alert">
+          <p>{error}</p>
+          <button className="btn btn-secondary btn-sm" onClick={loadMarketData}>
+            Try Again
+          </button>
+        </div>
+      )}
+
+      <div className="calculator-content">
+        {/* Input Section */}
+        <div className="input-section">
+          <div className="input-group">
+            <label htmlFor="crypto-select" className="form-label">
+              Select Cryptocurrency
+            </label>
+            <select
+              id="crypto-select"
+              className="form-input crypto-select"
+              value={selectedAsset?.id || ''}
+              onChange={(e) => {
+                const asset = cryptoAssets.find(crypto => crypto.id === e.target.value);
+                setSelectedAsset(asset || null);
+              }}
+              disabled={isLoading}
+            >
+              <option value="">Choose a cryptocurrency...</option>
+              {cryptoAssets.map((crypto) => (
+                <option key={crypto.id} value={crypto.id}>
+                  {crypto.name} ({crypto.symbol}) - {formatCurrency(crypto.price)}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="input-group">
+            <label htmlFor="amount-input" className="form-label">
+              Amount
+            </label>
+            <div className="amount-input-wrapper">
+              <input
+                id="amount-input"
+                type="number"
+                min="0"
+                step="any"
+                className="form-input amount-input"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                placeholder="Enter amount"
+                disabled={isLoading}
+              />
+              {selectedAsset && (
+                <span className="input-suffix">{selectedAsset.symbol}</span>
+              )}
+            </div>
+          </div>
+
+          <div className="input-group">
+            <label htmlFor="wage-input" className="form-label">
+              Your Hourly Wage ({userWage.currency})
+            </label>
+            <input
+              id="wage-input"
+              type="number"
+              min="0"
+              step="0.01"
+              className="form-input"
+              value={userWage.hourlyRate}
+              onChange={(e) => setUserWage(prev => ({
+                ...prev,
+                hourlyRate: Number(e.target.value) || 0
+              }))}
+              placeholder="Enter your hourly wage"
+              disabled={isLoading}
+            />
+          </div>
+        </div>
+
+        {/* Results Section */}
+        {conversionResult && (
+          <div className="results-section">
+            <h3 className="results-title">Conversion Results</h3>
+
+            {/* Fiat Value */}
+            <div className="result-card primary-result">
+              <div className="result-label">Total Value</div>
+              <div className="result-value highlight">
+                {formatCurrency(conversionResult.fiatValue)}
+              </div>
+              <div className="result-subtitle">
+                {formatNumber(conversionResult.inputAmount, 4)} {conversionResult.inputAsset.symbol}
+              </div>
+            </div>
+
+            {/* Precious Metals */}
+            <div className="results-grid">
+              <div className="result-card metal-result">
+                <div className="result-icon gold-icon">🥇</div>
+                <div className="result-content">
+                  <div className="result-label">Gold Equivalent</div>
+                  <div className="result-value text-gold">
+                    {formatNumber(conversionResult.goldOunces, 3)} oz
+                  </div>
+                  <div className="result-subtitle">
+                    @ {formatCurrency(metalPrices.find((m: PreciousMetalPrice) => m.metal === 'gold')?.price || 2050)}/oz
+                  </div>
+                </div>
+              </div>
+
+              <div className="result-card metal-result">
+                <div className="result-icon silver-icon">🥈</div>
+                <div className="result-content">
+                  <div className="result-label">Silver Equivalent</div>
+                  <div className="result-value text-silver">
+                    {formatNumber(conversionResult.silverOunces, 1)} oz
+                  </div>
+                  <div className="result-subtitle">
+                    @ {formatCurrency(metalPrices.find((m: PreciousMetalPrice) => m.metal === 'silver')?.price || 24)}/oz
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Time Equivalent */}
+            <div className="result-card time-result">
+              <div className="result-label">Time Equivalent at Your Wage</div>
+              <div className="time-breakdown">
+                <div className="time-item">
+                  <span className="time-value highlight">
+                    {formatNumber(conversionResult.timeEquivalent.hours, 1)}
+                  </span>
+                  <span className="time-unit">hours</span>
+                </div>
+                <div className="time-separator">≈</div>
+                <div className="time-item">
+                  <span className="time-value">
+                    {formatNumber(conversionResult.timeEquivalent.days, 1)}
+                  </span>
+                  <span className="time-unit">work days</span>
+                </div>
+                <div className="time-separator">≈</div>
+                <div className="time-item">
+                  <span className="time-value">
+                    {formatNumber(conversionResult.timeEquivalent.weeks, 1)}
+                  </span>
+                  <span className="time-unit">work weeks</span>
+                </div>
+              </div>
+              <div className="result-subtitle">
+                Based on ${userWage.hourlyRate}/hour wage
+              </div>
+            </div>
+
+            {/* Price Change Indicator */}
+            {selectedAsset && (
+              <div className="price-change-indicator">
+                <span className="price-change-label">24h Change:</span>
+                <span className={`price-change ${selectedAsset.priceChange24h >= 0 ? 'positive' : 'negative'}`}>
+                  {selectedAsset.priceChange24h >= 0 ? (
+                    <TrendingUp className="trend-icon" />
+                  ) : (
+                    <TrendingDown className="trend-icon" />
+                  )}
+                  {Math.abs(selectedAsset.priceChange24h).toFixed(2)}%
+                </span>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Last Updated */}
+        <div className="last-updated">
+          <span>Last updated: {lastUpdated.toLocaleTimeString()}</span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Calculator;

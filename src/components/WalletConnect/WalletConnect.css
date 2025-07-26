@@ -1,0 +1,444 @@
+/**
+ * WalletConnect Styles - Premium Connection Interface
+ */
+
+.wallet-connect {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    border: 2px solid var(--accent-gold);
+    box-shadow: 0 8px 24px rgba(0, 31, 63, 0.1);
+    transition: all 0.3s ease;
+}
+
+.wallet-connect:hover {
+    box-shadow: 0 12px 32px rgba(0, 31, 63, 0.15);
+    transform: translateY(-2px);
+}
+
+/* Header */
+.wallet-connect__header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.wallet-connect__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    background: linear-gradient(135deg, var(--primary-navy) 0%, #002a5c 100%);
+    border-radius: 50%;
+    color: white;
+    margin: 0 auto 1rem;
+}
+
+.wallet-connect__title {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary-navy);
+    line-height: 1.2;
+}
+
+.wallet-connect__subtitle {
+    margin: 0;
+    color: #6b7280;
+    font-size: 0.875rem;
+    line-height: 1.4;
+}
+
+/* Connected State */
+.wallet-connect--connected {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+}
+
+.wallet-connect__status {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.wallet-connect__avatar {
+    width: 48px;
+    height: 48px;
+    background: var(--accent-gold);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-navy);
+}
+
+.wallet-connect__avatar-icon {
+    width: 24px;
+    height: 24px;
+}
+
+.wallet-connect__info {
+    flex: 1;
+}
+
+.wallet-connect__address {
+    font-family: 'Monaco', 'Menlo', monospace;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--primary-navy);
+    margin-bottom: 0.25rem;
+}
+
+.wallet-connect__status-text {
+    font-size: 0.875rem;
+    color: #059669;
+    font-weight: 500;
+}
+
+.wallet-connect__indicator {
+    width: 12px;
+    height: 12px;
+    background: #10b981;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+.wallet-connect__connected-benefits {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: rgba(16, 185, 129, 0.1);
+    border-radius: 8px;
+    border: 1px solid #10b981;
+}
+
+.wallet-connect__welcome {
+    margin: 0;
+    color: #065f46;
+    font-size: 0.875rem;
+    text-align: center;
+}
+
+/* Loading State */
+.wallet-connect__loading {
+    text-align: center;
+    padding: 2rem;
+}
+
+.wallet-connect__spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid #e5e7eb;
+    border-top: 3px solid var(--accent-gold);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 1rem;
+}
+
+.wallet-connect__loading p {
+    margin: 0;
+    color: #6b7280;
+    font-size: 0.875rem;
+}
+
+/* Action */
+.wallet-connect__action {
+    margin: 2rem 0;
+}
+
+/* Security */
+.wallet-connect__security {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background: #f8fafc;
+    border-radius: 8px;
+}
+
+.wallet-connect__security-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: #059669;
+    font-weight: 500;
+}
+
+/* Benefits */
+.wallet-connect__benefits {
+    margin-top: 2rem;
+}
+
+.wallet-connect__benefits-title {
+    margin: 0 0 1rem 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--primary-navy);
+    text-align: center;
+}
+
+.wallet-connect__benefits-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.wallet-connect__benefit {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem;
+    background: #f8fafc;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+}
+
+.wallet-connect__benefit-icon {
+    color: var(--accent-gold);
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    margin-top: 0.125rem;
+}
+
+.wallet-connect__benefit-content {
+    flex: 1;
+}
+
+.wallet-connect__benefit-title {
+    font-weight: 600;
+    color: var(--primary-navy);
+    margin-bottom: 0.25rem;
+    font-size: 0.875rem;
+}
+
+.wallet-connect__benefit-description {
+    font-size: 0.75rem;
+    color: #6b7280;
+    line-height: 1.4;
+}
+
+/* Premium Preview */
+.wallet-connect__premium-preview {
+    background: linear-gradient(135deg, #fef3cd 0%, #fde68a 100%);
+    border: 2px solid var(--accent-gold);
+    border-radius: 12px;
+    padding: 1.5rem;
+    position: relative;
+    margin-top: 1rem;
+}
+
+.wallet-connect__premium-badge {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--accent-gold);
+    color: var(--primary-navy);
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.wallet-connect__premium-text {
+    margin: 0 0 1rem 0;
+    font-size: 0.875rem;
+    color: #92400e;
+    line-height: 1.5;
+    text-align: center;
+}
+
+.wallet-connect__learn-more {
+    background: none;
+    border: none;
+    color: var(--primary-navy);
+    font-weight: 600;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0;
+    margin-left: 0.25rem;
+}
+
+.wallet-connect__premium-details {
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 1rem;
+}
+
+.wallet-connect__premium-details ul {
+    margin: 0;
+    padding: 0 0 0 1.5rem;
+    color: #92400e;
+    font-size: 0.75rem;
+}
+
+.wallet-connect__premium-details li {
+    margin-bottom: 0.25rem;
+    line-height: 1.4;
+}
+
+/* Call to Action */
+.wallet-connect__cta {
+    text-align: center;
+    margin-top: 2rem;
+    padding: 1rem;
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    border-radius: 8px;
+    border: 1px solid #0ea5e9;
+}
+
+.wallet-connect__cta-text {
+    margin: 0;
+    font-size: 0.875rem;
+    color: #0c4a6e;
+}
+
+/* Variants */
+.wallet-connect--minimal {
+    padding: 1rem;
+    border: 1px solid #e5e7eb;
+}
+
+.wallet-connect--minimal .wallet-connect__header {
+    margin-bottom: 1rem;
+}
+
+.wallet-connect--minimal .wallet-connect__title {
+    font-size: 1.125rem;
+}
+
+.wallet-connect--premium {
+    border-color: var(--accent-gold);
+    background: linear-gradient(135deg, #fefbf3 0%, #fef3cd 100%);
+}
+
+/* Animations */
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Dark Mode */
+@media (prefers-color-scheme: dark) {
+    .wallet-connect {
+        background: #1f2937;
+        border-color: var(--accent-gold);
+    }
+
+    .wallet-connect__title {
+        color: white;
+    }
+
+    .wallet-connect__subtitle {
+        color: #d1d5db;
+    }
+
+    .wallet-connect--connected {
+        background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+    }
+
+    .wallet-connect__benefit {
+        background: #374151;
+        border-color: #4b5563;
+    }
+
+    .wallet-connect__benefit-title {
+        color: white;
+    }
+
+    .wallet-connect__benefit-description {
+        color: #d1d5db;
+    }
+
+    .wallet-connect__security {
+        background: #374151;
+    }
+
+    .wallet-connect__cta {
+        background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+        border-color: #3b82f6;
+    }
+
+    .wallet-connect__cta-text {
+        color: #dbeafe;
+    }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .wallet-connect {
+        padding: 1.5rem;
+    }
+
+    .wallet-connect__title {
+        font-size: 1.25rem;
+    }
+
+    .wallet-connect__security {
+        flex-direction: column;
+        gap: 0.75rem;
+        align-items: center;
+    }
+
+    .wallet-connect__benefits-list {
+        gap: 0.75rem;
+    }
+
+    .wallet-connect__benefit {
+        padding: 0.75rem;
+    }
+
+    .wallet-connect__premium-preview {
+        padding: 1rem;
+    }
+}
+
+/* High Contrast */
+@media (prefers-contrast: high) {
+    .wallet-connect {
+        border-width: 3px;
+    }
+
+    .wallet-connect__benefit {
+        border-width: 2px;
+    }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+
+    .wallet-connect,
+    .wallet-connect__spinner,
+    .wallet-connect__indicator {
+        animation: none;
+        transition: none;
+    }
+
+    .wallet-connect:hover {
+        transform: none;
+    }
+}

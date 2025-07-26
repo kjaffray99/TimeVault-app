@@ -1,0 +1,381 @@
+/**
+ * MintButton Styles - Luxury Gold/Blue Theme for High Conversion
+ * 
+ * Design System:
+ * - Navy Primary (#001F3F) for trust and stability
+ * - Gold Accents (#D4AF37) for luxury and FOMO
+ * - WCAG 4.5:1 contrast ratios for accessibility
+ * - Mobile-responsive design
+ * - Dark mode support for extended sessions
+ * - Smooth animations for premium feel
+ */
+
+.mint-button-container {
+    position: relative;
+    display: inline-block;
+}
+
+/* Base Button Styles */
+.mint-button {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border: 2px solid transparent;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--primary-navy) 0%, #002a5c 100%);
+    color: white;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 1.2;
+    text-decoration: none;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    outline: none;
+    min-height: 48px;
+    /* Touch target accessibility */
+    min-width: 120px;
+    box-shadow:
+        0 4px 12px rgba(0, 31, 63, 0.3),
+        0 2px 4px rgba(0, 31, 63, 0.1);
+}
+
+/* Variant Styles */
+.mint-button--primary {
+    background: linear-gradient(135deg, var(--primary-navy) 0%, #002a5c 100%);
+    border-color: var(--primary-navy);
+}
+
+.mint-button--secondary {
+    background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+    border-color: #4a5568;
+}
+
+.mint-button--premium {
+    background: linear-gradient(135deg, var(--accent-gold) 0%, #b8941f 100%);
+    color: var(--primary-navy);
+    border-color: var(--accent-gold);
+    box-shadow:
+        0 4px 20px rgba(212, 175, 55, 0.4),
+        0 2px 8px rgba(212, 175, 55, 0.2);
+}
+
+/* Size Variants */
+.mint-button--small {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    min-height: 40px;
+    min-width: 100px;
+}
+
+.mint-button--medium {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    min-height: 48px;
+    min-width: 120px;
+}
+
+.mint-button--large {
+    padding: 1rem 2rem;
+    font-size: 1.125rem;
+    min-height: 56px;
+    min-width: 140px;
+}
+
+/* State Styles */
+.mint-button:hover:not(.mint-button--disabled) {
+    transform: translateY(-2px);
+    box-shadow:
+        0 8px 25px rgba(0, 31, 63, 0.4),
+        0 4px 12px rgba(0, 31, 63, 0.2);
+}
+
+.mint-button--premium:hover:not(.mint-button--disabled) {
+    box-shadow:
+        0 8px 30px rgba(212, 175, 55, 0.5),
+        0 4px 15px rgba(212, 175, 55, 0.3);
+    background: linear-gradient(135deg, #e6c547 0%, #d4af37 100%);
+}
+
+.mint-button:focus-visible {
+    outline: 3px solid var(--accent-gold);
+    outline-offset: 2px;
+}
+
+.mint-button--disabled {
+    background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+    color: #9ca3af;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+    border-color: #6b7280;
+}
+
+.mint-button--loading {
+    cursor: wait;
+}
+
+.mint-button--hovered {
+    border-color: var(--accent-gold);
+}
+
+.mint-button--pulsing {
+    animation: mint-pulse 0.2s ease-out;
+}
+
+/* Button Content */
+.mint-button__icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    flex-shrink: 0;
+}
+
+.mint-button__text {
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.mint-button__spinner {
+    width: 1.25rem;
+    height: 1.25rem;
+    animation: mint-spin 1s linear infinite;
+}
+
+.mint-button__premium-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background: var(--accent-gold);
+    color: var(--primary-navy);
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: mint-sparkle 2s ease-in-out infinite;
+}
+
+.mint-button__lock {
+    margin-left: 0.25rem;
+    opacity: 0.7;
+}
+
+/* Ripple Effect */
+.mint-button__ripple {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    transition: all 0.6s ease-out;
+}
+
+.mint-button:active .mint-button__ripple {
+    width: 300px;
+    height: 300px;
+}
+
+/* Tooltips */
+.mint-button__requirements,
+.mint-button__benefits {
+    position: absolute;
+    bottom: calc(100% + 12px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--primary-navy);
+    color: white;
+    padding: 1rem;
+    border-radius: 8px;
+    min-width: 200px;
+    max-width: 300px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 1000;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--accent-gold);
+}
+
+.mint-button__requirements:before,
+.mint-button__benefits:before {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 8px solid transparent;
+    border-top-color: var(--primary-navy);
+}
+
+.mint-button__requirements--visible,
+.mint-button__benefits--visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.mint-button__requirements-content h4,
+.mint-button__benefits-content h4 {
+    margin: 0 0 0.5rem 0;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--accent-gold);
+}
+
+.mint-button__requirements-content ul,
+.mint-button__benefits-content ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.mint-button__requirements-content li,
+.mint-button__benefits-content li {
+    padding: 0.25rem 0;
+    font-size: 0.875rem;
+    position: relative;
+    padding-left: 1.5rem;
+}
+
+.mint-button__requirements-content li:before,
+.mint-button__benefits-content li:before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: var(--accent-gold);
+    font-weight: bold;
+}
+
+/* Animations */
+@keyframes mint-spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes mint-pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes mint-sparkle {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.7;
+        transform: scale(1.1);
+    }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+
+    .mint-button__requirements,
+    .mint-button__benefits {
+        background: #1a202c;
+        border-color: var(--accent-gold);
+    }
+
+    .mint-button__requirements:before,
+    .mint-button__benefits:before {
+        border-top-color: #1a202c;
+    }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .mint-button {
+        padding: 0.875rem 1.25rem;
+        font-size: 1rem;
+        min-height: 52px;
+        /* Larger touch targets on mobile */
+    }
+
+    .mint-button--small {
+        padding: 0.75rem 1rem;
+        font-size: 0.875rem;
+        min-height: 48px;
+    }
+
+    .mint-button--large {
+        padding: 1rem 1.5rem;
+        font-size: 1.125rem;
+        min-height: 56px;
+    }
+
+    .mint-button__requirements,
+    .mint-button__benefits {
+        min-width: 250px;
+        max-width: 90vw;
+        font-size: 0.875rem;
+    }
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+    .mint-button {
+        border-width: 3px;
+    }
+
+    .mint-button:focus-visible {
+        outline-width: 4px;
+    }
+
+    .mint-button__requirements,
+    .mint-button__benefits {
+        border-width: 2px;
+    }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+
+    .mint-button,
+    .mint-button__ripple,
+    .mint-button__premium-badge,
+    .mint-button__requirements,
+    .mint-button__benefits {
+        transition: none;
+        animation: none;
+    }
+
+    .mint-button:hover:not(.mint-button--disabled) {
+        transform: none;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .mint-button {
+        background: white !important;
+        color: black !important;
+        border: 2px solid black !important;
+        box-shadow: none !important;
+    }
+}
