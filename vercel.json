@@ -9,34 +9,22 @@
       }
     }
   ],
-  "routes": [
+  "rewrites": [
     {
-      "src": "/assets/(.*)",
-      "dest": "/assets/$1",
-      "headers": {
-        "cache-control": "public, max-age=31536000, immutable"
-      }
-    },
-    {
-      "src": "/favicon.ico",
-      "dest": "/vite.svg"
-    },
-    {
-      "src": "/(.*\\.(js|css|svg|png|jpg|jpeg|gif|ico|woff|woff2))",
-      "dest": "/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
+      "source": "/((?!api/).*)",
+      "destination": "/index.html"
     }
   ],
-  "env": {
-    "VITE_COINGECKO_API_URL": "https://api.coingecko.com/api/v3",
-    "VITE_METALS_API_URL": "https://api.metals.live/v1",
-    "VITE_ENABLE_PREMIUM_FEATURES": "true",
-    "VITE_ENABLE_ANALYTICS": "true"
-  },
   "headers": [
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
     {
       "source": "/(.*)",
       "headers": [
@@ -55,8 +43,18 @@
         {
           "key": "Referrer-Policy",
           "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=31536000; includeSubDomains"
         }
       ]
     }
-  ]
+  ],
+  "env": {
+    "VITE_COINGECKO_API_URL": "https://api.coingecko.com/api/v3",
+    "VITE_METALS_API_URL": "https://api.metals.live/v1",
+    "VITE_ENABLE_PREMIUM_FEATURES": "true",
+    "VITE_ENABLE_ANALYTICS": "true"
+  }
 }
