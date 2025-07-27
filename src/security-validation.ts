@@ -36,7 +36,7 @@ const validateApiEndpoints = async () => {
             import.meta.env.VITE_COINGECKO_API_URL,
             import.meta.env.VITE_METALS_API_URL
         ];
-        
+
         console.log('✅ API Endpoints Configured:', testUrls);
         return true;
     } catch (error) {
@@ -52,7 +52,7 @@ const validateRateLimiting = () => {
         windowMs: 60000,
         environment: import.meta.env.NODE_ENV
     };
-    
+
     console.log('✅ Rate Limiting Active:', rateLimitConfig);
     return rateLimitConfig.maxRequests <= 50; // Production should be 50 or less
 };
@@ -65,7 +65,7 @@ const validateSecurityFeatures = () => {
         migrationWarnings: import.meta.env.VITE_MIGRATION_WARNINGS === 'true',
         cacheEnabled: import.meta.env.VITE_CACHE_ENABLED === 'true'
     };
-    
+
     console.log('✅ Security Features Status:', securityStatus);
     return Object.values(securityStatus).every(status => status === true);
 };
@@ -78,7 +78,7 @@ const validateDataSecurity = (): boolean => {
         { input: 'SELECT * FROM users', expected: 'sanitized' },
         { input: 'normal input text', expected: 'valid' }
     ];
-    
+
     console.log('✅ Input Validation Tests Ready:', testInputs.length);
     return true;
 };
@@ -86,7 +86,7 @@ const validateDataSecurity = (): boolean => {
 // Run All Validation Tests
 const runSecurityValidation = async () => {
     console.log('\n🔍 Starting TimeVault Security Validation...\n');
-    
+
     const tests = [
         { name: 'Environment Configuration', test: () => Object.keys(envConfig).length > 0 },
         { name: 'Security Headers', test: validateSecurityHeaders },
@@ -95,9 +95,9 @@ const runSecurityValidation = async () => {
         { name: 'Security Features', test: validateSecurityFeatures },
         { name: 'Data Security', test: validateDataSecurity }
     ];
-    
+
     let passedTests = 0;
-    
+
     for (const { name, test } of tests) {
         try {
             const result = await test();
@@ -112,9 +112,9 @@ const runSecurityValidation = async () => {
             console.log(`❌ ${name}: ERROR -`, error.message);
         }
     }
-    
+
     console.log(`\n📊 Security Validation Complete: ${passedTests}/${tests.length} tests passed`);
-    
+
     if (passedTests === tests.length) {
         console.log('\n🎉 ALL SECURITY TESTS PASSED - PRODUCTION READY! 🚀');
         console.log('🛡️ Enterprise-grade security active');
@@ -124,12 +124,12 @@ const runSecurityValidation = async () => {
     } else {
         console.log('\n⚠️ Some security tests failed - review required');
     }
-    
+
     return passedTests === tests.length;
 };
 
 // Export for use in application
-export { runSecurityValidation, validateSecurityFeatures, validateRateLimiting };
+export { runSecurityValidation, validateRateLimiting, validateSecurityFeatures };
 
 // Auto-run validation in development
 if (import.meta.env.DEV) {

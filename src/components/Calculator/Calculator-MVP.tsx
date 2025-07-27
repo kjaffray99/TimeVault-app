@@ -95,8 +95,8 @@ const Calculator: React.FC<CalculatorProps> = ({ className = '' }) => {
     // Handle amount input changes
     const handleAmountChange = (value: string) => {
         setAmount(value);
-        track('calculator_amount_changed', { 
-            amount: value, 
+        track('calculator_amount_changed', {
+            amount: value,
             asset: selectedAsset?.symbol || 'unknown'
         });
     };
