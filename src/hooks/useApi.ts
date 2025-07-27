@@ -10,8 +10,10 @@ import type { CryptoAsset, PreciousMetalPrice } from '../types';
 const API_CONFIG = {
     COINGECKO_BASE: import.meta.env.VITE_COINGECKO_API_URL || 'https://api.coingecko.com/api/v3',
     METALS_BASE: import.meta.env.VITE_METALS_API_URL || 'https://api.metals.live/v1',
+    COINGECKO_API_KEY: import.meta.env.VITE_COINGECKO_API_KEY || '', // Optional for demo
     TIMEOUT: parseInt(import.meta.env.VITE_API_TIMEOUT || '10000'),
     CACHE_DURATION: 5 * 60 * 1000, // 5 minutes
+    DEMO_MODE: !import.meta.env.VITE_COINGECKO_API_KEY, // Use demo data if no API key
 };
 
 interface ApiState {
@@ -72,34 +74,71 @@ export const useApi = () => {
         const cached = cache.get(cacheKey);
         if (cached) return cached;
 
-        const response = await axios.get(
-            `${API_CONFIG.COINGECKO_BASE}/coins/markets`,
-            {
-                params: {
-                    vs_currency: 'usd',
-                    ids: 'bitcoin,ethereum,ripple,cardano,solana,polygon,chainlink',
-                    order: 'market_cap_desc',
-                    per_page: 10,
-                    page: 1,
-                    sparkline: false,
-                    price_change_percentage: '24h'
+        try {
+            const response = await axios.get(
+                `${API_CONFIG.COINGECKO_BASE}/coins/markets`,
+                {
+                    params: {
+                        vs_currency: 'usd',
+                        ids: 'bitcoin,ethereum,ripple,cardano,solana,polygon,chainlink',
+                        order: 'market_cap_desc',
+                        per_page: 10,
+                        page: 1,
+                        sparkline: false,
+                        price_change_percentage: '24h'
+                    },
+                    timeout: API_CONFIG.TIMEOUT
+                }
+            );
+
+            const cryptoData: CryptoAsset[] = response.data.map((coin: any) => ({
+                id: coin.id,
+                symbol: coin.symbol,
+                name: coin.name,
+                current_price: coin.current_price,
+                price_change_percentage_24h: coin.price_change_percentage_24h || 0,
+                market_cap: coin.market_cap || 0,
+                image: coin.image
+            }));
+
+            cache.set(cacheKey, cryptoData);
+            return cryptoData;
+        } catch (error) {
+            console.warn('CoinGecko API failed, using demo data:', error);
+            // Fallback to demo data
+            const demoData: CryptoAsset[] = [
+                {
+                    id: 'bitcoin',
+                    symbol: 'btc',
+                    name: 'Bitcoin',
+                    current_price: 97500 + (Math.random() - 0.5) * 1000,
+                    price_change_percentage_24h: (Math.random() - 0.5) * 10,
+                    market_cap: 1900000000000,
+                    image: 'https://coin-images.coingecko.com/coins/images/1/large/bitcoin.png'
                 },
-                timeout: API_CONFIG.TIMEOUT
-            }
-        );
-
-        const cryptoData: CryptoAsset[] = response.data.map((coin: any) => ({
-            id: coin.id,
-            symbol: coin.symbol,
-            name: coin.name,
-            current_price: coin.current_price,
-            price_change_percentage_24h: coin.price_change_percentage_24h || 0,
-            market_cap: coin.market_cap || 0,
-            image: coin.image
-        }));
-
-        cache.set(cacheKey, cryptoData);
-        return cryptoData;
+                {
+                    id: 'ethereum',
+                    symbol: 'eth',
+                    name: 'Ethereum',
+                    current_price: 3400 + (Math.random() - 0.5) * 200,
+                    price_change_percentage_24h: (Math.random() - 0.5) * 8,
+                    market_cap: 400000000000,
+                    image: 'https://coin-images.coingecko.com/coins/images/279/large/ethereum.png'
+                },
+                {
+                    id: 'ripple',
+                    symbol: 'xrp',
+                    name: 'XRP',
+                    current_price: 2.5 + (Math.random() - 0.5) * 0.5,
+                    price_change_percentage_24h: (Math.random() - 0.5) * 15,
+                    market_cap: 140000000000,
+                    image: 'https://coin-images.coingecko.com/coins/images/44/large/xrp-symbol-white-128.png'
+                }
+            ];
+            
+            cache.set(cacheKey, demoData);
+            return demoData;
+        }
     }, []);
 
     // Fetch metals prices (simulated API call - replace with real endpoint)
@@ -108,26 +147,64 @@ export const useApi = () => {
         const cached = cache.get(cacheKey);
         if (cached) return cached;
 
-        // Simulated metals API call - replace with actual Metals.live API
-        const metalData: PreciousMetalPrice[] = [
-            {
-                metal: 'gold',
-                currency: 'USD',
-                price_per_oz: 2050 + (Math.random() - 0.5) * 100, // Simulate price fluctuation
-                change_24h: (Math.random() - 0.5) * 10,
-                last_updated: new Date().toISOString()
-            },
-            {
-                metal: 'silver',
-                currency: 'USD',
-                price_per_oz: 25 + (Math.random() - 0.5) * 5, // Simulate price fluctuation
-                change_24h: (Math.random() - 0.5) * 2,
-                last_updated: new Date().toISOString()
-            }
-        ];
+        try {
+            // Simulated metals API call - replace with actual Metals.live API
+            const metalData: PreciousMetalPrice[] = [
+                {
+                    metal: 'gold',
+                    price: 2050 + (Math.random() - 0.5) * 100, // Simulate price fluctuation
+                    unit: 'oz',
+                    change: (Math.random() - 0.5) * 10,
+                    lastUpdated: new Date().toISOString()
+                },
+                {
+                    metal: 'silver',
+                    price: 25 + (Math.random() - 0.5) * 5, // Simulate price fluctuation
+                    unit: 'oz',
+                    change: (Math.random() - 0.5) * 2,
+                    lastUpdated: new Date().toISOString()
+                },
+                {
+                    metal: 'platinum',
+                    price: 950 + (Math.random() - 0.5) * 50,
+                    unit: 'oz',
+                    change: (Math.random() - 0.5) * 5,
+                    lastUpdated: new Date().toISOString()
+                },
+                {
+                    metal: 'palladium',
+                    price: 1200 + (Math.random() - 0.5) * 100,
+                    unit: 'oz',
+                    change: (Math.random() - 0.5) * 8,
+                    lastUpdated: new Date().toISOString()
+                }
+            ];
 
-        cache.set(cacheKey, metalData);
-        return metalData;
+            cache.set(cacheKey, metalData);
+            return metalData;
+        } catch (error) {
+            console.warn('Metals API failed, using demo data:', error);
+            // Return same demo data on error
+            const demoData: PreciousMetalPrice[] = [
+                {
+                    metal: 'gold',
+                    price: 2050,
+                    unit: 'oz',
+                    change: 12.5,
+                    lastUpdated: new Date().toISOString()
+                },
+                {
+                    metal: 'silver',
+                    price: 25,
+                    unit: 'oz',
+                    change: -0.8,
+                    lastUpdated: new Date().toISOString()
+                }
+            ];
+            
+            cache.set(cacheKey, demoData);
+            return demoData;
+        }
     }, []);
 
     // Fetch all data

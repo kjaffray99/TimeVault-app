@@ -35,6 +35,9 @@ const Calculator: React.FC<CalculatorProps> = ({ className = '' }) => {
     const [amount, setAmount] = useState<string>('1');
     const [hourlyWage, setHourlyWage] = useState<number>(25);
     const [showPremiumUpsell, setShowPremiumUpsell] = useState(false);
+    const [calculationCount, setCalculationCount] = useState(0);
+    const [streak, setStreak] = useState(0);
+    const [showAchievement, setShowAchievement] = useState<string | null>(null);
 
     // Debounce amount changes to reduce calculations
     const debouncedAmount = useDebounce(amount, 300);
@@ -47,7 +50,43 @@ const Calculator: React.FC<CalculatorProps> = ({ className = '' }) => {
         }
     }, [cryptoPrices, selectedAsset]);
 
-    // Track calculator usage
+    // Track calculator usage and engagement
+    useEffect(() => {
+        if (debouncedAmount && selectedAsset) {
+            const newCount = calculationCount + 1;
+            setCalculationCount(newCount);
+            
+            // Update streak
+            const today = new Date().toDateString();
+            const lastUsed = localStorage.getItem('timevault_last_used');
+            if (lastUsed !== today) {
+                const newStreak = lastUsed === new Date(Date.now() - 86400000).toDateString() ? streak + 1 : 1;
+                setStreak(newStreak);
+                localStorage.setItem('timevault_last_used', today);
+                localStorage.setItem('timevault_streak', newStreak.toString());
+                
+                // Achievement triggers
+                if (newStreak === 3) {
+                    setShowAchievement('3-Day Streak! 🔥');
+                    setTimeout(() => setShowAchievement(null), 3000);
+                }
+            }
+            
+            // Premium upsell triggers
+            if (newCount === 5 || newCount === 15) {
+                setShowPremiumUpsell(true);
+                trackPremiumInterest('calculator_usage_trigger', { calculations: newCount });
+            }
+        }
+    }, [debouncedAmount, selectedAsset, calculationCount, streak, trackPremiumInterest]);
+
+    // Initialize streak from localStorage
+    useEffect(() => {
+        const savedStreak = localStorage.getItem('timevault_streak');
+        if (savedStreak) {
+            setStreak(parseInt(savedStreak));
+        }
+    }, []);
     useEffect(() => {
         track('calculator_loaded');
     }, [track]);
@@ -161,19 +200,38 @@ const Calculator: React.FC<CalculatorProps> = ({ className = '' }) => {
 
     return (
         <div className={`calculator ${className}`}>
+            {/* Achievement Notification */}
+            {showAchievement && (
+                <div className="achievement-notification">
+                    <div className="achievement-content">
+                        <span className="achievement-text">{showAchievement}</span>
+                    </div>
+                </div>
+            )}
+
             {/* Header */}
             <div className="calculator-header">
                 <div className="calculator-title">
                     <CalculatorIcon className="title-icon" />
                     <h2>Digital Asset Value Calculator</h2>
+                    {streak > 0 && (
+                        <div className="streak-badge">
+                            🔥 {streak} day{streak > 1 ? 's' : ''}
+                        </div>
+                    )}
                 </div>
-                <button
-                    onClick={refresh}
-                    className="refresh-button"
-                    disabled={isLoading}
-                >
-                    <RefreshCw className={isLoading ? "refresh-icon loading" : "refresh-icon"} />
-                </button>
+                <div className="header-stats">
+                    <span className="calculation-count">
+                        💎 {calculationCount} calculation{calculationCount !== 1 ? 's' : ''}
+                    </span>
+                    <button
+                        onClick={refresh}
+                        className="refresh-button"
+                        disabled={isLoading}
+                    >
+                        <RefreshCw className={isLoading ? "refresh-icon loading" : "refresh-icon"} />
+                    </button>
+                </div>
             </div>
 
             {/* Input Section */}
