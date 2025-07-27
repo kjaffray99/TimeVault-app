@@ -1,0 +1,115 @@
+{
+    "name": "TimeVault Styling System Configuration",
+    "version": "2.0.0",
+    "automation": {
+        "autoApply": true,
+        "observeChanges": true,
+        "selector": "[data-tv-auto], .calculator, .tv-card, .tv-button",
+        "debugMode": false
+    },
+    "theme": {
+        "defaultMode": "dark",
+        "autoDetect": true,
+        "persist": true,
+        "customColors": {
+            "primaryNavy": "#001F3F",
+            "accentGold": "#D4AF37",
+            "neutralWhite": "#FFFFFF",
+            "neutralSilver": "#C0C0C0"
+        }
+    },
+    "components": {
+        "prefix": "tv",
+        "autoImport": true,
+        "variants": {
+            "card": [
+                "default",
+                "premium"
+            ],
+            "button": [
+                "primary",
+                "secondary",
+                "ghost",
+                "premium"
+            ],
+            "input": [
+                "default",
+                "select"
+            ],
+            "status": [
+                "success",
+                "warning",
+                "error",
+                "premium"
+            ]
+        }
+    },
+    "migration": {
+        "enabled": true,
+        "backupFiles": true,
+        "logChanges": true,
+        "classMapping": {
+            "calculator-card": "tv-card",
+            "premium-card": "tv-card tv-card--premium",
+            "submit-button": "tv-button tv-button--primary",
+            "secondary-button": "tv-button tv-button--secondary",
+            "form-input": "tv-input",
+            "select-input": "tv-input tv-select",
+            "loading-spinner": "tv-loading",
+            "error-message": "tv-status tv-status--error",
+            "success-message": "tv-status tv-status--success",
+            "container": "tv-container",
+            "main-content": "tv-container"
+        },
+        "variableMapping": {
+            "--primary-blue": "--tv-primary-navy",
+            "--primary-navy": "--tv-primary-navy",
+            "--accent-gold": "--tv-accent-gold",
+            "--neutral-white": "--tv-white",
+            "--neutral-silver": "--tv-silver",
+            "--spacing-xs": "--tv-space-1",
+            "--spacing-sm": "--tv-space-2",
+            "--spacing-md": "--tv-space-4",
+            "--spacing-lg": "--tv-space-6",
+            "--spacing-xl": "--tv-space-8",
+            "--spacing-2xl": "--tv-space-12",
+            "--radius-sm": "--tv-radius-sm",
+            "--radius-md": "--tv-radius-md",
+            "--radius-lg": "--tv-radius-lg",
+            "--font-size-xs": "--tv-font-size-xs",
+            "--font-size-sm": "--tv-font-size-sm",
+            "--font-size-base": "--tv-font-size-base",
+            "--font-size-lg": "--tv-font-size-lg",
+            "--font-size-xl": "--tv-font-size-xl",
+            "--font-size-2xl": "--tv-font-size-2xl",
+            "--font-size-3xl": "--tv-font-size-3xl",
+            "--transition-fast": "--tv-transition-fast",
+            "--transition-normal": "--tv-transition-normal",
+            "--transition-slow": "--tv-transition-slow"
+        }
+    },
+    "performance": {
+        "lazyLoad": true,
+        "treeshake": true,
+        "minifyCSS": true,
+        "optimizeVariables": true
+    },
+    "accessibility": {
+        "highContrast": true,
+        "reducedMotion": true,
+        "focusVisible": true,
+        "screenReader": true
+    },
+    "development": {
+        "hotReload": true,
+        "sourceMap": true,
+        "warnings": true,
+        "suggestions": true
+    },
+    "build": {
+        "extractCSS": true,
+        "purgeUnused": true,
+        "generateTypes": true,
+        "documentation": true
+    }
+}

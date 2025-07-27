@@ -9,6 +9,7 @@ export { default as MintButton } from './MintButton';
 export { default as MintModal } from './MintModal';
 
 // Re-export hooks for convenience
+export { useMintableAssets } from '../../hooks/useMint';
 export { useMint } from '../../hooks/useMintSimple';
 
 // Re-export types for external usage

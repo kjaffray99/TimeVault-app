@@ -2,17 +2,21 @@ import { useEffect, useState } from 'react';
 import './App.css';
 import Calculator from './components/Calculator/Calculator-MVP';
 import ComplianceModal from './components/ComplianceModal';
+import Dashboard from './components/Dashboard/Dashboard';
 import { ErrorBoundary } from './components/ErrorBoundary';
+import Footer from './components/Footer/Footer';
+import Header from './components/Header/Header';
+import Premium from './components/Premium/Premium';
+import { UserProvider } from './contexts';
 import { useAnalytics } from './hooks/useAnalytics';
 
 function App() {
-  const { trackPageView, track } = useAnalytics();
+  const { track } = useAnalytics();
   const [showCompliance, setShowCompliance] = useState(false);
   const [complianceAccepted, setComplianceAccepted] = useState(false);
+  const [activeTab, setActiveTab] = useState<'calculator' | 'dashboard' | 'premium'>('calculator');
 
   useEffect(() => {
-    trackPageView('calculator_page');
-
     // Check if compliance was previously accepted
     const accepted = localStorage.getItem('timevault_compliance_accepted');
     if (!accepted) {
@@ -20,7 +24,7 @@ function App() {
     } else {
       setComplianceAccepted(true);
     }
-  }, [trackPageView]);
+  }, []);
 
   const handleComplianceAccept = () => {
     localStorage.setItem('timevault_compliance_accepted', 'true');
@@ -35,44 +39,52 @@ function App() {
     window.location.href = 'https://www.google.com';
   };
 
+  const renderActiveComponent = () => {
+    switch (activeTab) {
+      case 'calculator':
+        return (
+          <div className="container">
+            <Calculator />
+          </div>
+        );
+      case 'dashboard':
+        return <Dashboard />;
+      case 'premium':
+        return <Premium />;
+      default:
+        return (
+          <div className="container">
+            <Calculator />
+          </div>
+        );
+    }
+  };
+
   return (
     <ErrorBoundary>
-      <div className="App">
-        <ComplianceModal
-          isOpen={showCompliance}
-          onAccept={handleComplianceAccept}
-          onDecline={handleComplianceDecline}
-        />
+      <UserProvider>
+        <div className="App">
+          <ComplianceModal
+            isOpen={showCompliance}
+            onAccept={handleComplianceAccept}
+            onDecline={handleComplianceDecline}
+          />
 
-        <header className="App-header">
-          <h1>TimeVault</h1>
-          <p>Transform digital assets into precious metals and personal time</p>
-        </header>
-
-        <main>
           {complianceAccepted || !showCompliance ? (
-            <Calculator />
+            <>
+              <Header activeTab={activeTab} setActiveTab={setActiveTab} />
+              <main className="App-main">
+                {renderActiveComponent()}
+              </main>
+              <Footer />
+            </>
           ) : (
             <div style={{ padding: '2rem', textAlign: 'center' }}>
               <p>Please review and accept our terms to continue.</p>
             </div>
           )}
-        </main>
-
-        <footer className="App-footer">
-          <div className="footer-content">
-            <p>&copy; 2025 TimeVault. Educational tools for digital asset analysis.</p>
-            <div className="footer-links">
-              <a href="#privacy">Privacy Policy</a>
-              <a href="#terms">Terms of Service</a>
-              <a href="#contact">Contact</a>
-              <span className="disclaimer">
-                Educational purposes only • Not financial advice • IRS 2025 compliant
-              </span>
-            </div>
-          </div>
-        </footer>
-      </div>
+        </div>
+      </UserProvider>
     </ErrorBoundary>
   );
 }

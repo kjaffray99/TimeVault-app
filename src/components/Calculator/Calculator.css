@@ -1,17 +1,19 @@
 /* Calculator Component Styles */
 .calculator {
-  background: var(--card-background, rgba(255, 255, 255, 0.05));
+  background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: var(--radius-lg);
-  padding: var(--spacing-xl);
+  border-radius: 0.75rem;
+  padding: 2rem;
   backdrop-filter: blur(10px);
-  transition: all var(--transition-normal);
+  transition: all 0.3s ease;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 .calculator:hover {
   border-color: rgba(212, 175, 55, 0.3);
   transform: translateY(-2px);
-  box-shadow: var(--shadow-lg);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
 }
 
 /* Header */
@@ -19,29 +21,29 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: var(--spacing-xl);
-  padding-bottom: var(--spacing-lg);
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .calculator-title {
   display: flex;
   align-items: center;
-  gap: var(--spacing-md);
+  gap: 1rem;
   position: relative;
 }
 
 .title-icon {
   width: 2rem;
   height: 2rem;
-  color: var(--accent-gold);
+  color: #D4AF37;
 }
 
 .calculator-title h2 {
   margin: 0;
-  font-size: var(--font-size-2xl);
+  font-size: 1.5rem;
   font-weight: 600;
-  color: var(--neutral-white);
+  color: #FFFFFF;
 }
 
 .streak-badge {
@@ -165,6 +167,13 @@
 }
 
 /* Input Section */
+.calculator-inputs {
+  display: grid;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  grid-template-columns: 1fr;
+}
+
 .input-section {
   display: grid;
   gap: var(--spacing-lg);
@@ -174,6 +183,38 @@
 .input-group {
   display: flex;
   flex-direction: column;
+  gap: 0.5rem;
+}
+
+.input-group label {
+  font-weight: 600;
+  color: #FFFFFF;
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+}
+
+.amount-input,
+.asset-select,
+.wage-input {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  color: #FFFFFF;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.amount-input:focus,
+.asset-select:focus,
+.wage-input:focus {
+  outline: none;
+  border-color: #D4AF37;
+  box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
+}
+
+.asset-select {
+  cursor: pointer;
 }
 
 .crypto-select {
@@ -208,6 +249,156 @@
 }
 
 /* Results Section */
+.calculator-results {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.result-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.result-card:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(212, 175, 55, 0.2);
+  transform: translateY(-1px);
+}
+
+.result-card h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #FFFFFF;
+}
+
+.total-value .value-display {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.value-amount {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #D4AF37;
+}
+
+.price-change {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.trend-icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.positive {
+  color: #28A745;
+}
+
+.negative {
+  color: #DC3545;
+}
+
+.metals-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+}
+
+.metal-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.metal-name {
+  font-weight: 600;
+  color: #C0C0C0;
+}
+
+.metal-amount {
+  font-weight: 700;
+  color: #D4AF37;
+}
+
+.time-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1rem;
+}
+
+.time-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+}
+
+.time-label {
+  font-size: 0.875rem;
+  color: #C0C0C0;
+  margin-bottom: 0.5rem;
+}
+
+.time-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #D4AF37;
+}
+
+.premium-upsell {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+}
+
+.premium-button {
+  background: linear-gradient(135deg, #D4AF37, #F4D03F);
+  color: #001F3F;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.premium-button:hover {
+  background: linear-gradient(135deg, #F4D03F, #FFD700);
+  transform: translateY(-1px);
+}
+
+.premium-icon {
+  width: 1rem;
+  height: 1rem;
+}
+
 .results-section {
   margin-top: var(--spacing-2xl);
 }

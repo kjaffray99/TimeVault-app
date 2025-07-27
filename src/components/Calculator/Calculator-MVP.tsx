@@ -53,10 +53,14 @@ const Calculator: React.FC<CalculatorProps> = ({ className = '' }) => {
     // Track calculator usage and engagement
     useEffect(() => {
         if (debouncedAmount && selectedAsset) {
-            const newCount = calculationCount + 1;
-            setCalculationCount(newCount);
+            // Only increment count when amount or asset changes, not when count changes
+            track('calculation_performed', {
+                asset: selectedAsset.symbol,
+                amount: debouncedAmount,
+                timestamp: new Date().toISOString()
+            });
 
-            // Update streak
+            // Update streak (only once per day)
             const today = new Date().toDateString();
             const lastUsed = localStorage.getItem('timevault_last_used');
             if (lastUsed !== today) {
@@ -72,13 +76,20 @@ const Calculator: React.FC<CalculatorProps> = ({ className = '' }) => {
                 }
             }
 
-            // Premium upsell triggers
-            if (newCount === 5 || newCount === 15) {
-                setShowPremiumUpsell(true);
-                trackPremiumInterest('calculator_usage_trigger', { calculations: newCount });
-            }
+            // Increment calculation count safely
+            setCalculationCount(prev => {
+                const newCount = prev + 1;
+
+                // Premium upsell triggers
+                if (newCount === 5 || newCount === 15) {
+                    setShowPremiumUpsell(true);
+                    trackPremiumInterest('calculator_usage_trigger', { calculations: newCount });
+                }
+
+                return newCount;
+            });
         }
-    }, [debouncedAmount, selectedAsset, calculationCount, streak, trackPremiumInterest]);
+    }, [debouncedAmount, selectedAsset, streak, track, trackPremiumInterest]); // Removed calculationCount from dependencies
 
     // Initialize streak from localStorage
     useEffect(() => {

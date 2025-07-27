@@ -430,24 +430,24 @@
   .premium-page {
     padding: 1rem;
   }
-  
+
   .premium-header h1 {
     font-size: 2rem;
   }
-  
+
   .pricing-cards {
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
-  
+
   .pricing-card.popular {
     transform: none;
   }
-  
+
   .features-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .premium-guarantees {
     grid-template-columns: 1fr;
     padding: 1rem;

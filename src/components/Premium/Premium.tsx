@@ -3,17 +3,17 @@
  * Core revenue generator - $9.99/month subscriptions
  */
 
-import React, { useState, useEffect } from 'react';
-import { Crown, Check, Zap, TrendingUp, PieChart, Bell, Sparkles, Lock } from 'lucide-react';
+import { Bell, Check, Crown, PieChart, Sparkles, TrendingUp, Zap, type LucideIcon } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { ANALYTICS_EVENTS, PREMIUM } from '../../constants';
 import { useUser } from '../../contexts';
-import { PREMIUM, ANALYTICS_EVENTS } from '../../constants';
 import './Premium.css';
 
 interface PremiumFeature {
   id: string;
   name: string;
   description: string;
-  icon: React.ComponentType<{ size?: number; className?: string }>;
+  icon: LucideIcon;
   comingSoon?: boolean;
 }
 
@@ -120,7 +120,7 @@ const Premium: React.FC = () => {
   const handleStartTrial = async (planId: string) => {
     setIsLoading(true);
     const plan = pricingPlans.find(p => p.id === planId);
-    
+
     console.log(ANALYTICS_EVENTS.TRIAL_STARTED, {
       planId,
       price: plan?.price,
@@ -133,7 +133,7 @@ const Premium: React.FC = () => {
       dispatch({ type: 'SET_PREMIUM', payload: true });
       setIsLoading(false);
       setShowPaymentModal(true);
-      
+
       // Save premium status
       localStorage.setItem('timevault_premium_trial_start', new Date().toISOString());
       localStorage.setItem('timevault_premium_status', 'true');
@@ -183,7 +183,7 @@ const Premium: React.FC = () => {
         </div>
 
         <div className="subscription-management">
-          <button 
+          <button
             className="manage-subscription-btn"
             onClick={handleManageSubscription}
           >
@@ -229,13 +229,13 @@ const Premium: React.FC = () => {
         <h2>Choose Your Plan</h2>
         <div className="pricing-cards">
           {pricingPlans.map((plan) => (
-            <div 
+            <div
               key={plan.id}
               className={`pricing-card ${selectedPlan === plan.id ? 'selected' : ''} ${plan.popular ? 'popular' : ''}`}
               onClick={() => handlePlanSelect(plan.id)}
             >
               {plan.popular && <div className="popular-badge">Most Popular</div>}
-              
+
               <div className="plan-header">
                 <h3>{plan.name}</h3>
                 <div className="plan-price">
@@ -248,7 +248,7 @@ const Premium: React.FC = () => {
                   </div>
                 )}
               </div>
-              
+
               <div className="plan-features">
                 {plan.features.map((feature, index) => (
                   <div key={index} className="feature-item">
@@ -257,8 +257,8 @@ const Premium: React.FC = () => {
                   </div>
                 ))}
               </div>
-              
-              <button 
+
+              <button
                 className={`plan-cta ${selectedPlan === plan.id ? 'selected' : ''}`}
                 onClick={(e) => {
                   e.stopPropagation();
@@ -307,13 +307,13 @@ const Premium: React.FC = () => {
               </div>
               <h3>🎉 Welcome to Premium!</h3>
               <p>Your 7-day free trial has started. Enjoy all premium features!</p>
-              
+
               <div className="trial-info">
                 <p><strong>Trial ends:</strong> {new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toLocaleDateString()}</p>
                 <p><strong>You'll be charged:</strong> ${pricingPlans.find(p => p.id === selectedPlan)?.price}/{pricingPlans.find(p => p.id === selectedPlan)?.period}</p>
               </div>
-              
-              <button 
+
+              <button
                 className="modal-cta"
                 onClick={() => setShowPaymentModal(false)}
               >
@@ -323,11 +323,6 @@ const Premium: React.FC = () => {
           </div>
         </div>
       )}
-    </div>
-  );
-};
-
-export default Premium;
     </div>
   );
 };

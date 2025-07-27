@@ -1,0 +1,112 @@
+/* TimeVault Footer Styles */
+
+.App-footer {
+    background: linear-gradient(135deg, #001122 0%, #001F3F 100%);
+    color: var(--neutral-white);
+    padding: var(--spacing-xl) var(--spacing-lg);
+    border-top: 2px solid var(--accent-gold);
+    margin-top: auto;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
+
+.footer-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--spacing-md);
+}
+
+.footer-copyright {
+    margin: 0;
+    font-size: var(--font-size-base);
+    color: var(--neutral-silver);
+    font-weight: 400;
+}
+
+.footer-links {
+    display: flex;
+    gap: var(--spacing-lg);
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.footer-link {
+    color: var(--neutral-white);
+    text-decoration: none;
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    transition: color var(--transition-normal);
+    padding: var(--spacing-xs) 0;
+}
+
+.footer-link:hover {
+    color: var(--accent-gold);
+    text-decoration: underline;
+}
+
+.footer-disclaimer {
+    text-align: center;
+    padding-top: var(--spacing-md);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.disclaimer-text {
+    font-size: var(--font-size-xs);
+    color: var(--neutral-silver);
+    font-style: italic;
+    opacity: 0.8;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .App-footer {
+        padding: var(--spacing-lg) var(--spacing-md);
+    }
+
+    .footer-main {
+        flex-direction: column;
+        text-align: center;
+        gap: var(--spacing-sm);
+    }
+
+    .footer-links {
+        justify-content: center;
+        gap: var(--spacing-md);
+    }
+
+    .footer-copyright {
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .footer-links {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+    }
+
+    .disclaimer-text {
+        font-size: 0.75rem;
+    }
+}
+
+/* Accessibility */
+.footer-link:focus {
+    outline: 2px solid var(--accent-gold);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .footer-link {
+        transition: none;
+    }
+}

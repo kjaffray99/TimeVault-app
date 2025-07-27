@@ -1,9 +1,9 @@
-import { Award, BookOpen, Clock, Coins, Info, Lightbulb, Star, Trophy, Crown, Lock, Zap } from 'lucide-react';
+import { Award, BookOpen, Clock, Coins, Crown, Info, Lightbulb, Lock, Star, Trophy, Zap } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { PREMIUM } from '../../constants';
 import { useUser } from '../../contexts';
 import { educationalService } from '../../services/education';
-import { PREMIUM } from '../../constants';
 import type { EducationalContent, UserProfile } from '../../types';
 import MintShowcase from '../MintShowcase/MintShowcase';
 import './Dashboard.css';
@@ -30,7 +30,6 @@ const Dashboard: React.FC<DashboardProps> = ({
   });
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [showPremiumUpsell, setShowPremiumUpsell] = useState(false);
 
   // Load educational content
   useEffect(() => {
@@ -476,13 +475,6 @@ const Dashboard: React.FC<DashboardProps> = ({
               Start Free Trial
             </Link>
           </div>
-          <button 
-            className="upsell-close"
-            onClick={() => setShowPremiumUpsell(false)}
-            aria-label="Close premium banner"
-          >
-            ×
-          </button>
         </div>
       )}
 
