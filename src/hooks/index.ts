@@ -3,7 +3,7 @@
  * Reusable hooks for common functionality
  */
 
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 // ========================================
 // DEBOUNCE HOOK
@@ -187,4 +187,111 @@ export const useClickOutside = (
       document.removeEventListener('touchstart', listener);
     };
   }, [ref, handler]);
+};
+
+// ========================================
+// ANALYTICS HOOK
+// ========================================
+
+/**
+ * Analytics Hook for Revenue Tracking
+ * Tracks user interactions for conversion optimization
+ */
+
+interface AnalyticsEvent {
+  event: string;
+  properties?: Record<string, any>;
+}
+
+interface UseAnalyticsReturn {
+  track: (event: string, properties?: Record<string, any>) => void;
+  identify: (userId: string, traits?: Record<string, any>) => void;
+  page: (name: string, properties?: Record<string, any>) => void;
+}
+
+export const useAnalytics = (): UseAnalyticsReturn => {
+  const track = useCallback((event: string, properties?: Record<string, any>) => {
+    const analyticsEvent: AnalyticsEvent = {
+      event,
+      properties: {
+        timestamp: new Date().toISOString(),
+        url: typeof window !== 'undefined' ? window.location.href : '',
+        userAgent: typeof window !== 'undefined' ? navigator.userAgent : '',
+        ...properties,
+      },
+    };
+
+    // Log to console for development
+    console.log('📊 Analytics Event:', analyticsEvent);
+
+    // Store in localStorage for development tracking
+    if (typeof window !== 'undefined') {
+      const events = JSON.parse(localStorage.getItem('timevault_analytics') || '[]');
+      events.push(analyticsEvent);
+      
+      // Keep only last 100 events
+      if (events.length > 100) {
+        events.splice(0, events.length - 100);
+      }
+      
+      localStorage.setItem('timevault_analytics', JSON.stringify(events));
+    }
+
+    // TODO: Integration with real analytics services
+    // Google Analytics 4, Mixpanel, PostHog, etc.
+  }, []);
+
+  const identify = useCallback((userId: string, traits?: Record<string, any>) => {
+    const identifyEvent = {
+      userId,
+      traits: {
+        timestamp: new Date().toISOString(),
+        ...traits,
+      },
+    };
+
+    console.log('👤 User Identified:', identifyEvent);
+
+    // Store user info for analytics
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('timevault_user_id', userId);
+      if (traits) {
+        localStorage.setItem('timevault_user_traits', JSON.stringify(traits));
+      }
+    }
+  }, []);
+
+  const page = useCallback((name: string, properties?: Record<string, any>) => {
+    const pageEvent = {
+      name,
+      properties: {
+        timestamp: new Date().toISOString(),
+        url: typeof window !== 'undefined' ? window.location.href : '',
+        path: typeof window !== 'undefined' ? window.location.pathname : '',
+        referrer: typeof window !== 'undefined' ? document.referrer : '',
+        ...properties,
+      },
+    };
+
+    console.log('📄 Page View:', pageEvent);
+
+    // Store page views
+    if (typeof window !== 'undefined') {
+      const pageViews = JSON.parse(localStorage.getItem('timevault_page_views') || '[]');
+      pageViews.push(pageEvent);
+      
+      // Keep only last 50 page views
+      if (pageViews.length > 50) {
+        pageViews.splice(0, pageViews.length - 50);
+      }
+      
+      localStorage.setItem('timevault_page_views', JSON.stringify(pageViews));
+    }
+  }, []);
+
+  return {
+    track,
+    identify,
+    page,
+  };
 };

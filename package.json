@@ -21,6 +21,8 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@stripe/react-stripe-js": "^3.8.0",
+    "@stripe/stripe-js": "^7.6.1",
     "@thirdweb-dev/react": "^4.9.4",
     "@thirdweb-dev/sdk": "^4.0.99",
     "@types/react-router-dom": "^5.3.3",

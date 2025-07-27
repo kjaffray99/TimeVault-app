@@ -1,376 +1,333 @@
-import {
-  ArrowRight,
-  BarChart3,
-  Check,
-  Crown,
-  Lock,
-  Star,
-  TrendingUp,
-  Unlock,
-  Wallet,
-  Zap
-} from 'lucide-react';
-import React, { useEffect, useState } from 'react';
-import type { AIInsight, PremiumFeature, WalletConnection } from '../../types';
+/**
+ * Premium Subscription Component
+ * Core revenue generator - $9.99/month subscriptions
+ */
+
+import React, { useState, useEffect } from 'react';
+import { Crown, Check, Zap, TrendingUp, PieChart, Bell, Sparkles, Lock } from 'lucide-react';
+import { useUser } from '../../contexts';
+import { PREMIUM, ANALYTICS_EVENTS } from '../../constants';
 import './Premium.css';
 
-interface PremiumProps {
-  userProfile?: any;
-  walletConnection?: WalletConnection;
-  onConnectWallet?: () => void;
-  onSubscribe?: (planId: string) => void;
-  className?: string;
+interface PremiumFeature {
+  id: string;
+  name: string;
+  description: string;
+  icon: React.ComponentType<{ size?: number; className?: string }>;
+  comingSoon?: boolean;
 }
 
-const Premium: React.FC<PremiumProps> = ({
-  userProfile: _userProfile,
-  walletConnection,
-  onConnectWallet,
-  onSubscribe,
-  className = '',
-}) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
-  const [aiInsights, setAiInsights] = useState<AIInsight[]>([]);
+interface PricingPlan {
+  id: string;
+  name: string;
+  price: number;
+  period: string;
+  features: string[];
+  popular?: boolean;
+  trialDays?: number;
+}
+
+const Premium: React.FC = () => {
+  const { state: userState, dispatch } = useUser();
+  const [selectedPlan, setSelectedPlan] = useState<string>('monthly');
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Mock premium features
   const premiumFeatures: PremiumFeature[] = [
     {
-      id: 'basic',
-      name: 'Basic Premium',
-      description: 'Essential tools for crypto analysis',
-      tier: 'basic',
-      price: 9.99,
-      features: [
-        'Advanced price charts',
-        'Portfolio tracking',
-        'Basic AI insights',
-        'Premium support',
-        'Ad-free experience'
-      ],
-      ctaText: 'Start Basic Plan',
+      id: 'historical_charts',
+      name: 'Historical Price Charts',
+      description: 'Interactive charts with 1-year price history, technical indicators, and trend analysis',
+      icon: TrendingUp,
     },
     {
-      id: 'pro',
-      name: 'Pro Analytics',
-      description: 'Professional-grade analysis tools',
-      tier: 'premium',
-      price: 19.99,
-      features: [
-        'All Basic features',
-        'Advanced AI insights',
-        'Custom alerts',
-        'Multi-exchange data',
-        'Technical indicators',
-        'Risk analysis tools',
-        'Priority support'
-      ],
-      ctaText: 'Upgrade to Pro',
+      id: 'ai_insights',
+      name: 'AI Market Insights',
+      description: 'AI-powered market analysis, predictions, and personalized investment recommendations',
+      icon: Sparkles,
     },
     {
-      id: 'enterprise',
-      name: 'Enterprise Suite',
-      description: 'Complete solution for serious traders',
-      tier: 'enterprise',
-      price: 49.99,
-      features: [
-        'All Pro features',
-        'Real-time data feeds',
-        'Custom trading bots',
-        'Advanced backtesting',
-        'API access',
-        'White-label options',
-        'Dedicated support',
-        'Custom integrations'
-      ],
-      ctaText: 'Contact Sales',
+      id: 'portfolio_tracking',
+      name: 'Advanced Portfolio Tracking',
+      description: 'Real-time portfolio valuation, asset allocation analysis, and performance metrics',
+      icon: PieChart,
+    },
+    {
+      id: 'real_time_alerts',
+      name: 'Real-Time Price Alerts',
+      description: 'Custom price thresholds, percentage change alerts, and mobile notifications',
+      icon: Bell,
+    },
+    {
+      id: 'advanced_analytics',
+      name: 'Advanced Analytics',
+      description: 'Correlation analysis, volatility metrics, and risk assessment tools',
+      icon: Zap,
+      comingSoon: true,
     },
   ];
 
-  // Mock AI insights
-  const mockInsights: AIInsight[] = [
+  const pricingPlans: PricingPlan[] = [
     {
-      id: 'insight-1',
-      title: 'Bitcoin Technical Breakout Detected',
-      content: 'BTC has broken above the key resistance level of $45,000 with strong volume. Historical patterns suggest a potential move toward $52,000 in the next 2-3 weeks. Consider gradual position building.',
-      type: 'market_analysis',
-      confidence: 87,
-      timestamp: new Date().toISOString(),
-      sources: ['Technical Analysis', 'Volume Profile', 'Historical Patterns'],
+      id: 'monthly',
+      name: 'Monthly Premium',
+      price: PREMIUM.SUBSCRIPTION_PRICE,
+      period: 'month',
+      trialDays: PREMIUM.TRIAL_DURATION_DAYS,
+      features: [
+        'All premium features included',
+        '7-day free trial',
+        'Cancel anytime',
+        'Priority customer support',
+      ],
+      popular: true,
     },
     {
-      id: 'insight-2',
-      title: 'Ethereum DeFi Activity Surge',
-      content: 'DeFi activity on Ethereum has increased 35% this week, with TVL reaching new highs. This typically correlates with ETH price appreciation. Watch for gas fee implications.',
-      type: 'market_analysis',
-      confidence: 92,
-      timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-      sources: ['DeFi Analytics', 'On-chain Data', 'TVL Metrics'],
-    },
-    {
-      id: 'insight-3',
-      title: 'Portfolio Rebalancing Recommendation',
-      content: 'Your portfolio is overweight in large-cap assets. Consider allocating 15% to mid-cap altcoins for better risk-adjusted returns based on current market conditions.',
-      type: 'portfolio_advice',
-      confidence: 78,
-      timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
-      sources: ['Portfolio Analysis', 'Risk Metrics', 'Market Correlation'],
+      id: 'yearly',
+      name: 'Annual Premium',
+      price: PREMIUM.SUBSCRIPTION_PRICE * 10, // 2 months free
+      period: 'year',
+      trialDays: PREMIUM.TRIAL_DURATION_DAYS,
+      features: [
+        'All premium features included',
+        'Save 2 months (17% off)',
+        '7-day free trial',
+        'Priority customer support',
+        'Early access to new features',
+      ],
     },
   ];
 
   useEffect(() => {
-    setIsAuthenticated(!!walletConnection?.address);
-    if (walletConnection?.address) {
-      setAiInsights(mockInsights);
+    // Track premium page views for analytics
+    if (typeof window !== 'undefined') {
+      console.log(ANALYTICS_EVENTS.PREMIUM_INTEREST, {
+        source: 'premium_page_view',
+        userType: userState.isPremium ? 'existing_premium' : 'free_user',
+      });
     }
-  }, [walletConnection]);
+  }, [userState.isPremium]);
 
-  const handleConnectWallet = () => {
+  const handlePlanSelect = (planId: string) => {
+    setSelectedPlan(planId);
+    console.log(ANALYTICS_EVENTS.PREMIUM_INTEREST, {
+      source: 'plan_selected',
+      planId,
+      price: pricingPlans.find(p => p.id === planId)?.price,
+    });
+  };
+
+  const handleStartTrial = async (planId: string) => {
     setIsLoading(true);
-    // Simulate wallet connection delay
+    const plan = pricingPlans.find(p => p.id === planId);
+    
+    console.log(ANALYTICS_EVENTS.TRIAL_STARTED, {
+      planId,
+      price: plan?.price,
+      trialDays: plan?.trialDays,
+    });
+
+    // TODO: Integrate with Stripe Checkout
+    // For now, simulate the trial start
     setTimeout(() => {
+      dispatch({ type: 'SET_PREMIUM', payload: true });
       setIsLoading(false);
-      onConnectWallet?.();
+      setShowPaymentModal(true);
+      
+      // Save premium status
+      localStorage.setItem('timevault_premium_trial_start', new Date().toISOString());
+      localStorage.setItem('timevault_premium_status', 'true');
     }, 1500);
   };
 
-  const handleSubscribe = (planId: string) => {
-    setSelectedPlan(planId);
-    onSubscribe?.(planId);
+  const handleManageSubscription = () => {
+    console.log(ANALYTICS_EVENTS.FEATURE_ACCESSED, {
+      feature: 'subscription_management',
+    });
+    // TODO: Redirect to Stripe customer portal
+    alert('Subscription management portal will be integrated with Stripe');
   };
 
-  const getConfidenceColor = (confidence: number) => {
-    if (confidence >= 80) return 'high-confidence';
-    if (confidence >= 60) return 'medium-confidence';
-    return 'low-confidence';
-  };
-
-  const formatTimestamp = (timestamp: string) => {
-    const date = new Date(timestamp);
-    const now = new Date();
-    const diffHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
-
-    if (diffHours < 1) return 'Just now';
-    if (diffHours < 24) return `${diffHours}h ago`;
-    return date.toLocaleDateString();
-  };
-
-  if (!isAuthenticated) {
+  if (userState.isPremium) {
     return (
-      <div className={`premium ${className}`}>
-        <div className="premium-gate">
-          <div className="gate-content">
-            <div className="gate-icon">
-              <Lock className="lock-icon" />
-            </div>
-            <h2 className="gate-title">Premium Features</h2>
-            <p className="gate-description">
-              Connect your wallet to unlock advanced analytics, AI insights, and premium trading tools.
-            </p>
-
-            <div className="gate-features">
-              <div className="gate-feature">
-                <BarChart3 className="feature-icon" />
-                <span>Advanced Charts</span>
-              </div>
-              <div className="gate-feature">
-                <Zap className="feature-icon" />
-                <span>AI Insights</span>
-              </div>
-              <div className="gate-feature">
-                <TrendingUp className="feature-icon" />
-                <span>Portfolio Analytics</span>
-              </div>
-              <div className="gate-feature">
-                <Crown className="feature-icon" />
-                <span>Premium Support</span>
-              </div>
-            </div>
-
-            <button
-              className="btn btn-primary btn-lg connect-wallet-btn"
-              onClick={handleConnectWallet}
-              disabled={isLoading}
-            >
-              <Wallet className="btn-icon" />
-              {isLoading ? 'Connecting...' : 'Connect Wallet'}
-            </button>
-
-            <p className="gate-disclaimer">
-              No fees for wallet connection. Premium features require separate subscription.
-            </p>
+      <div className="premium-page premium-active">
+        <div className="premium-header">
+          <div className="premium-badge">
+            <Crown size={32} />
+            <span>Premium Active</span>
           </div>
+          <h1>Welcome to TimeVault Premium!</h1>
+          <p>You have access to all premium features</p>
+        </div>
+
+        <div className="premium-features-grid">
+          {premiumFeatures.map((feature) => {
+            const IconComponent = feature.icon;
+            return (
+              <div key={feature.id} className="feature-card active">
+                <div className="feature-icon">
+                  <IconComponent size={32} />
+                </div>
+                <div className="feature-content">
+                  <h3>{feature.name}</h3>
+                  <p>{feature.description}</p>
+                  {feature.comingSoon ? (
+                    <span className="coming-soon">Coming Soon</span>
+                  ) : (
+                    <span className="feature-status">✅ Available</span>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="subscription-management">
+          <button 
+            className="manage-subscription-btn"
+            onClick={handleManageSubscription}
+          >
+            Manage Subscription
+          </button>
         </div>
       </div>
     );
   }
 
   return (
-    <div className={`premium authenticated ${className}`}>
+    <div className="premium-page">
       <div className="premium-header">
-        <div className="header-content">
-          <div className="status-indicator">
-            <Unlock className="unlock-icon" />
-            <span className="status-text">Wallet Connected</span>
-          </div>
-          <h2>Premium Analytics</h2>
-          <p>Advanced tools and insights for serious crypto investors</p>
+        <Crown size={48} className="header-icon" />
+        <h1>Unlock TimeVault Premium</h1>
+        <p>Advanced features for serious crypto and precious metals investors</p>
+      </div>
+
+      <div className="premium-features-preview">
+        <h2>Premium Features</h2>
+        <div className="features-grid">
+          {premiumFeatures.map((feature) => {
+            const IconComponent = feature.icon;
+            return (
+              <div key={feature.id} className="feature-card preview">
+                <div className="feature-icon">
+                  <IconComponent size={32} />
+                </div>
+                <div className="feature-content">
+                  <h3>{feature.name}</h3>
+                  <p>{feature.description}</p>
+                  {feature.comingSoon && (
+                    <span className="coming-soon">Coming Soon</span>
+                  )}
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
 
-      {/* AI Insights Section */}
-      <div className="ai-insights-section">
-        <div className="section-header">
-          <div className="section-title">
-            <Zap className="section-icon" />
-            <h3>AI Market Insights</h3>
-          </div>
-          <span className="insights-badge">Live Analysis</span>
-        </div>
-
-        <div className="insights-grid">
-          {aiInsights.map((insight) => (
-            <div key={insight.id} className="insight-card">
-              <div className="insight-header">
-                <div className="insight-meta">
-                  <span className={`insight-type ${insight.type}`}>
-                    {insight.type.replace('_', ' ')}
-                  </span>
-                  <span className="insight-time">
-                    {formatTimestamp(insight.timestamp)}
-                  </span>
-                </div>
-                <div className={`confidence-indicator ${getConfidenceColor(insight.confidence)}`}>
-                  <span className="confidence-value">{insight.confidence}%</span>
-                  <span className="confidence-label">confidence</span>
-                </div>
-              </div>
-
-              <h4 className="insight-title">{insight.title}</h4>
-              <p className="insight-content">{insight.content}</p>
-
-              <div className="insight-sources">
-                <span className="sources-label">Sources:</span>
-                <div className="sources-list">
-                  {insight.sources.map((source, index) => (
-                    <span key={index} className="source-tag">{source}</span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Subscription Plans */}
-      <div className="subscription-section">
-        <div className="section-header">
-          <h3>Choose Your Plan</h3>
-          <p>Unlock the full potential of your crypto investments</p>
-        </div>
-
-        <div className="plans-grid">
-          {premiumFeatures.map((plan) => (
-            <div
+      <div className="pricing-section">
+        <h2>Choose Your Plan</h2>
+        <div className="pricing-cards">
+          {pricingPlans.map((plan) => (
+            <div 
               key={plan.id}
-              className={`plan-card ${plan.tier} ${selectedPlan === plan.id ? 'selected' : ''}`}
+              className={`pricing-card ${selectedPlan === plan.id ? 'selected' : ''} ${plan.popular ? 'popular' : ''}`}
+              onClick={() => handlePlanSelect(plan.id)}
             >
-              {plan.tier === 'premium' && (
-                <div className="popular-badge">
-                  <Star className="star-icon" />
-                  Most Popular
-                </div>
-              )}
-
+              {plan.popular && <div className="popular-badge">Most Popular</div>}
+              
               <div className="plan-header">
-                <h4 className="plan-name">{plan.name}</h4>
-                <p className="plan-description">{plan.description}</p>
+                <h3>{plan.name}</h3>
                 <div className="plan-price">
-                  <span className="price-amount">${plan.price}</span>
-                  <span className="price-period">/month</span>
+                  <span className="price">${plan.price}</span>
+                  <span className="period">/{plan.period}</span>
                 </div>
+                {plan.trialDays && (
+                  <div className="trial-info">
+                    {plan.trialDays}-day free trial
+                  </div>
+                )}
               </div>
-
+              
               <div className="plan-features">
                 {plan.features.map((feature, index) => (
                   <div key={index} className="feature-item">
-                    <Check className="check-icon" />
+                    <Check size={16} />
                     <span>{feature}</span>
                   </div>
                 ))}
               </div>
-
-              <button
-                className={`btn ${plan.tier === 'premium' ? 'btn-primary' : 'btn-secondary'} btn-lg plan-cta`}
-                onClick={() => handleSubscribe(plan.id)}
+              
+              <button 
+                className={`plan-cta ${selectedPlan === plan.id ? 'selected' : ''}`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleStartTrial(plan.id);
+                }}
+                disabled={isLoading}
               >
-                {plan.ctaText}
-                <ArrowRight className="arrow-icon" />
+                {isLoading ? 'Starting Trial...' : `Start ${plan.trialDays}-Day Free Trial`}
               </button>
-
-              {plan.tier === 'enterprise' && (
-                <p className="enterprise-note">
-                  Custom pricing available for teams
-                </p>
-              )}
             </div>
           ))}
         </div>
       </div>
 
-      {/* Feature Showcase */}
-      <div className="feature-showcase">
-        <h3>What You Get with Premium</h3>
-
-        <div className="showcase-grid">
-          <div className="showcase-item">
-            <div className="showcase-icon">
-              <BarChart3 className="icon" />
-            </div>
-            <h4>Advanced Charts</h4>
-            <p>Professional-grade charting tools with 50+ technical indicators and custom overlays.</p>
+      <div className="premium-guarantees">
+        <div className="guarantee-item">
+          <Check className="guarantee-icon" />
+          <div>
+            <h4>Cancel Anytime</h4>
+            <p>No long-term commitments. Cancel with one click.</p>
           </div>
-
-          <div className="showcase-item">
-            <div className="showcase-icon">
-              <Zap className="icon" />
-            </div>
-            <h4>AI-Powered Insights</h4>
-            <p>Machine learning algorithms analyze market data to provide actionable investment insights.</p>
+        </div>
+        <div className="guarantee-item">
+          <Check className="guarantee-icon" />
+          <div>
+            <h4>7-Day Free Trial</h4>
+            <p>Try all premium features risk-free for a full week.</p>
           </div>
-
-          <div className="showcase-item">
-            <div className="showcase-icon">
-              <TrendingUp className="icon" />
-            </div>
-            <h4>Portfolio Analytics</h4>
-            <p>Track performance, analyze risk, and optimize your crypto portfolio with advanced metrics.</p>
-          </div>
-
-          <div className="showcase-item">
-            <div className="showcase-icon">
-              <Crown className="icon" />
-            </div>
-            <h4>Premium Support</h4>
-            <p>Priority customer support with dedicated account managers for enterprise clients.</p>
+        </div>
+        <div className="guarantee-item">
+          <Check className="guarantee-icon" />
+          <div>
+            <h4>Instant Access</h4>
+            <p>Premium features activate immediately after signup.</p>
           </div>
         </div>
       </div>
 
-      {/* Call to Action */}
-      <div className="premium-cta">
-        <h3>Ready to Elevate Your Trading?</h3>
-        <p>Join thousands of successful crypto investors using TimeVault Premium</p>
-        <div className="cta-buttons">
-          <button className="btn btn-primary btn-lg">
-            Start 7-Day Free Trial
-          </button>
-          <button className="btn btn-ghost btn-lg">
-            View Feature Comparison
-          </button>
+      {/* Payment Success Modal */}
+      {showPaymentModal && (
+        <div className="payment-modal-overlay" onClick={() => setShowPaymentModal(false)}>
+          <div className="payment-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="payment-success">
+              <div className="success-icon">
+                <Crown size={48} />
+              </div>
+              <h3>🎉 Welcome to Premium!</h3>
+              <p>Your 7-day free trial has started. Enjoy all premium features!</p>
+              
+              <div className="trial-info">
+                <p><strong>Trial ends:</strong> {new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toLocaleDateString()}</p>
+                <p><strong>You'll be charged:</strong> ${pricingPlans.find(p => p.id === selectedPlan)?.price}/{pricingPlans.find(p => p.id === selectedPlan)?.period}</p>
+              </div>
+              
+              <button 
+                className="modal-cta"
+                onClick={() => setShowPaymentModal(false)}
+              >
+                Explore Premium Features
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
+      )}
+    </div>
+  );
+};
+
+export default Premium;
     </div>
   );
 };

@@ -1,6 +1,9 @@
-import { Award, BookOpen, Clock, Coins, Info, Lightbulb, Star, Trophy } from 'lucide-react';
+import { Award, BookOpen, Clock, Coins, Info, Lightbulb, Star, Trophy, Crown, Lock, Zap } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useUser } from '../../contexts';
 import { educationalService } from '../../services/education';
+import { PREMIUM } from '../../constants';
 import type { EducationalContent, UserProfile } from '../../types';
 import MintShowcase from '../MintShowcase/MintShowcase';
 import './Dashboard.css';
@@ -18,6 +21,7 @@ const Dashboard: React.FC<DashboardProps> = ({
   onTutorialComplete: _onTutorialComplete,
   className = '',
 }) => {
+  const { state: userState } = useUser();
   const [activeTab, setActiveTab] = useState<'quizzes' | 'tips' | 'tutorials' | 'instructions' | 'mint'>('quizzes');
   const [content, setContent] = useState<EducationalContent>({
     quizzes: [],
@@ -26,6 +30,7 @@ const Dashboard: React.FC<DashboardProps> = ({
   });
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showPremiumUpsell, setShowPremiumUpsell] = useState(false);
 
   // Load educational content
   useEffect(() => {
@@ -452,6 +457,35 @@ const Dashboard: React.FC<DashboardProps> = ({
         })}
       </div>
 
+      {/* Premium Upsell Banner */}
+      {!userState.isPremium && (
+        <div className="premium-upsell-banner">
+          <div className="upsell-content">
+            <div className="upsell-icon">
+              <Crown size={32} />
+            </div>
+            <div className="upsell-text">
+              <h3>Unlock Premium Features</h3>
+              <p>Get AI insights, advanced charts, and real-time alerts</p>
+            </div>
+            <div className="upsell-price">
+              <span className="price-amount">${PREMIUM.SUBSCRIPTION_PRICE}</span>
+              <span className="price-period">/month</span>
+            </div>
+            <Link to="/premium" className="upsell-cta">
+              Start Free Trial
+            </Link>
+          </div>
+          <button 
+            className="upsell-close"
+            onClick={() => setShowPremiumUpsell(false)}
+            aria-label="Close premium banner"
+          >
+            ×
+          </button>
+        </div>
+      )}
+
       {/* Tab Content */}
       <div
         className="tab-content-area"
@@ -461,6 +495,33 @@ const Dashboard: React.FC<DashboardProps> = ({
       >
         {renderTabContent()}
       </div>
+
+      {/* Premium Feature Teaser */}
+      {!userState.isPremium && activeTab === 'quizzes' && (
+        <div className="premium-teaser">
+          <div className="teaser-header">
+            <Lock className="teaser-icon" />
+            <h4>Premium Quiz Features</h4>
+          </div>
+          <div className="teaser-features">
+            <div className="teaser-feature">
+              <Zap size={16} />
+              <span>AI-powered quiz recommendations</span>
+            </div>
+            <div className="teaser-feature">
+              <Star size={16} />
+              <span>Advanced progress tracking</span>
+            </div>
+            <div className="teaser-feature">
+              <Trophy size={16} />
+              <span>Exclusive premium quizzes</span>
+            </div>
+          </div>
+          <Link to="/premium" className="teaser-cta">
+            Unlock Premium
+          </Link>
+        </div>
+      )}
     </div>
   );
 };
