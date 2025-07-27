@@ -1,5 +1,5 @@
-import React from 'react';
 import { AlertTriangle, X } from 'lucide-react';
+import React from 'react';
 
 interface ComplianceModalProps {
     isOpen: boolean;
@@ -40,9 +40,9 @@ const ComplianceModal: React.FC<ComplianceModalProps> = ({
                                 📊 Wage Data Collection (FDBR Compliance)
                             </h3>
                             <p>
-                                TimeVault collects hourly wage data for time conversion calculations only. 
-                                This data is processed locally in your browser and used to provide personalized 
-                                value comparisons. No wage information is stored on our servers or shared 
+                                TimeVault collects hourly wage data for time conversion calculations only.
+                                This data is processed locally in your browser and used to provide personalized
+                                value comparisons. No wage information is stored on our servers or shared
                                 with third parties.
                             </p>
                         </div>
@@ -53,9 +53,9 @@ const ComplianceModal: React.FC<ComplianceModalProps> = ({
                                 🏛️ Tax & Legal Disclaimer (IRS 2025)
                             </h3>
                             <p>
-                                <strong>IMPORTANT:</strong> Educational NFTs and utility tokens offered by TimeVault 
-                                may constitute taxable events under IRS 2025 guidelines. Digital asset conversions 
-                                and NFT transactions may have tax implications. This tool provides educational 
+                                <strong>IMPORTANT:</strong> Educational NFTs and utility tokens offered by TimeVault
+                                may constitute taxable events under IRS 2025 guidelines. Digital asset conversions
+                                and NFT transactions may have tax implications. This tool provides educational
                                 calculations only and does not constitute financial, tax, or investment advice.
                                 Consult a qualified tax professional for your specific situation.
                             </p>
@@ -67,9 +67,9 @@ const ComplianceModal: React.FC<ComplianceModalProps> = ({
                                 🎓 Educational NFTs - Utility Only
                             </h3>
                             <p>
-                                TimeVault Educational NFTs are utility tokens providing access to premium 
-                                features, educational content, and calculation tools. They are not investment 
-                                securities and hold no promise of financial return. Purchase for utility 
+                                TimeVault Educational NFTs are utility tokens providing access to premium
+                                features, educational content, and calculation tools. They are not investment
+                                securities and hold no promise of financial return. Purchase for utility
                                 value and educational access only.
                             </p>
                         </div>
@@ -80,8 +80,8 @@ const ComplianceModal: React.FC<ComplianceModalProps> = ({
                                 ⚠️ No Physical Metal Sales
                             </h3>
                             <p>
-                                TimeVault does not sell, store, or facilitate transactions of physical 
-                                precious metals. Price conversions are for educational comparison purposes 
+                                TimeVault does not sell, store, or facilitate transactions of physical
+                                precious metals. Price conversions are for educational comparison purposes
                                 only using real-time market data from third-party APIs.
                             </p>
                         </div>
@@ -92,8 +92,8 @@ const ComplianceModal: React.FC<ComplianceModalProps> = ({
                                 🔒 Privacy & Data Usage
                             </h3>
                             <p>
-                                By using TimeVault, you consent to local processing of calculation data, 
-                                anonymous usage analytics, and temporary caching of conversion results. 
+                                By using TimeVault, you consent to local processing of calculation data,
+                                anonymous usage analytics, and temporary caching of conversion results.
                                 No personal financial data is transmitted or stored externally.
                             </p>
                         </div>

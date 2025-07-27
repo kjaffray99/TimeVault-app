@@ -135,7 +135,7 @@ export const useApi = () => {
                     image: 'https://coin-images.coingecko.com/coins/images/44/large/xrp-symbol-white-128.png'
                 }
             ];
-            
+
             cache.set(cacheKey, demoData);
             return demoData;
         }
@@ -201,7 +201,7 @@ export const useApi = () => {
                     lastUpdated: new Date().toISOString()
                 }
             ];
-            
+
             cache.set(cacheKey, demoData);
             return demoData;
         }

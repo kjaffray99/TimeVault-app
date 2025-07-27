@@ -4,7 +4,7 @@ import { useAnalytics } from '../../hooks/useAnalytics';
 import { useApi } from '../../hooks/useApi';
 import { useDebounce } from '../../hooks/useDebounce';
 import type { CryptoAsset } from '../../types';
-import './Calculator-MVP.css';
+import './Calculator.css';
 
 interface CalculatorProps {
     className?: string;
@@ -55,7 +55,7 @@ const Calculator: React.FC<CalculatorProps> = ({ className = '' }) => {
         if (debouncedAmount && selectedAsset) {
             const newCount = calculationCount + 1;
             setCalculationCount(newCount);
-            
+
             // Update streak
             const today = new Date().toDateString();
             const lastUsed = localStorage.getItem('timevault_last_used');
@@ -64,14 +64,14 @@ const Calculator: React.FC<CalculatorProps> = ({ className = '' }) => {
                 setStreak(newStreak);
                 localStorage.setItem('timevault_last_used', today);
                 localStorage.setItem('timevault_streak', newStreak.toString());
-                
+
                 // Achievement triggers
                 if (newStreak === 3) {
                     setShowAchievement('3-Day Streak! 🔥');
                     setTimeout(() => setShowAchievement(null), 3000);
                 }
             }
-            
+
             // Premium upsell triggers
             if (newCount === 5 || newCount === 15) {
                 setShowPremiumUpsell(true);

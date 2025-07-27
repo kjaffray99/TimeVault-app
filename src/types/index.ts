@@ -1,4 +1,11 @@
-// Type definitions for TimeVault application
+/**
+ * TimeVault Application Type Definitions
+ * Centralized TypeScript interfaces for type safety and consistency
+ */
+
+// ========================================
+// CORE DATA TYPES
+// ========================================
 
 export interface CryptoAsset {
   id: string;
@@ -9,11 +16,12 @@ export interface CryptoAsset {
   market_cap?: number;
   volume_24h?: number;
   image: string;
-  price?: number; // Legacy compatibility
-  priceChange24h?: number; // Legacy compatibility
-  marketCap?: number; // Legacy compatibility
-  volume24h?: number; // Legacy compatibility
-  icon?: string; // Legacy compatibility
+  // Legacy compatibility
+  price?: number;
+  priceChange24h?: number;
+  marketCap?: number;
+  volume24h?: number;
+  icon?: string;
   lastUpdated?: string;
 }
 
@@ -25,17 +33,25 @@ export interface PreciousMetalPrice {
   change?: number;
 }
 
+// ========================================
+// CALCULATOR TYPES
+// ========================================
+
 export interface ConversionResult {
-  inputAmount: number;
-  inputAsset: CryptoAsset;
-  goldOunces: number;
-  silverOunces: number;
-  timeEquivalent: {
+  asset: CryptoAsset;
+  amount: number;
+  usdValue: number;
+  metals: {
+    gold: { amount: number; unit: string };
+    silver: { amount: number; unit: string };
+    platinum: { amount: number; unit: string };
+    palladium: { amount: number; unit: string };
+  };
+  timeValue: {
     hours: number;
     days: number;
     weeks: number;
   };
-  fiatValue: number;
 }
 
 export interface UserWage {

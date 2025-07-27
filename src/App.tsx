@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import './App.css';
 import Calculator from './components/Calculator/Calculator-MVP';
 import ComplianceModal from './components/ComplianceModal';
@@ -12,7 +12,7 @@ function App() {
 
   useEffect(() => {
     trackPageView('calculator_page');
-    
+
     // Check if compliance was previously accepted
     const accepted = localStorage.getItem('timevault_compliance_accepted');
     if (!accepted) {
@@ -43,7 +43,7 @@ function App() {
           onAccept={handleComplianceAccept}
           onDecline={handleComplianceDecline}
         />
-        
+
         <header className="App-header">
           <h1>TimeVault</h1>
           <p>Transform digital assets into precious metals and personal time</p>
