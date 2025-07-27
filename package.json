@@ -4,7 +4,13 @@
   "version": "1.0.0",
   "type": "module",
   "description": "TimeVault - Digital asset to precious metals and time converter",
-  "keywords": ["crypto", "precious metals", "calculator", "fintech", "react"],
+  "keywords": [
+    "crypto",
+    "precious metals",
+    "calculator",
+    "fintech",
+    "react"
+  ],
   "author": "TimeVault Team",
   "license": "MIT",
   "scripts": {
@@ -15,10 +21,16 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@thirdweb-dev/react": "^4.9.4",
+    "@thirdweb-dev/sdk": "^4.0.99",
+    "@types/react-router-dom": "^5.3.3",
+    "@types/recharts": "^1.8.29",
+    "axios": "^1.6.0",
+    "lucide-react": "^0.294.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "axios": "^1.6.0",
-    "lucide-react": "^0.294.0"
+    "react-router-dom": "^7.7.1",
+    "recharts": "^3.1.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.43",
