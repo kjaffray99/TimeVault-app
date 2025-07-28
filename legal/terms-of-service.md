@@ -150,12 +150,12 @@ TimeVault is a digital asset calculator and educational platform that:
 ## Contact Information
 
 ### Legal Inquiries
-- **Email**: legal@timevault.app
+- **Email**: legal@timevaultai.com
 - **Address**: [To be assigned - Florida registered address]
 - **Response Time**: We respond to legal inquiries within 5 business days
 
 ### Support
-- **Email**: support@timevault.app
+- **Email**: support@timevaultai.com
 - **Hours**: Monday-Friday, 9 AM - 5 PM EST
 
 ---

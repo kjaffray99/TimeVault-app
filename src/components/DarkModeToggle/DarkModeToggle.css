@@ -1,0 +1,139 @@
+/* Dark Mode Toggle Component Styles */
+.dark-mode-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: transparent;
+    border: 2px solid var(--accent-gold);
+    border-radius: 50px;
+    color: var(--accent-gold);
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.dark-mode-toggle:hover {
+    background: var(--accent-gold);
+    color: var(--primary-navy);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+}
+
+.dark-mode-toggle:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--accent-gold), 0 0 0 4px rgba(212, 175, 55, 0.2);
+}
+
+.toggle-icon-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.25rem;
+    height: 1.25rem;
+    position: relative;
+}
+
+.toggle-icon {
+    width: 1rem;
+    height: 1rem;
+    transition: all 0.3s ease;
+}
+
+.sun-icon {
+    animation: rotate 0.5s ease-in-out;
+}
+
+.moon-icon {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.toggle-text {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+    min-width: 2.5rem;
+    text-align: center;
+}
+
+/* Dark mode specific styles */
+.dark-mode .dark-mode-toggle {
+    border-color: var(--accent-gold);
+    color: var(--accent-gold);
+}
+
+.dark-mode .dark-mode-toggle:hover {
+    background: var(--accent-gold);
+    color: var(--primary-navy);
+}
+
+/* Responsive design */
+@media (max-width: 640px) {
+    .dark-mode-toggle {
+        padding: 0.375rem 0.75rem;
+        font-size: 0.75rem;
+    }
+
+    .toggle-icon {
+        width: 0.875rem;
+        height: 0.875rem;
+    }
+
+    .toggle-text {
+        min-width: 2rem;
+        font-size: 0.6875rem;
+    }
+}
+
+/* Animations */
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* High contrast mode for accessibility */
+@media (prefers-contrast: high) {
+    .dark-mode-toggle {
+        border-width: 3px;
+        font-weight: 700;
+    }
+
+    .dark-mode-toggle:hover {
+        box-shadow: 0 0 0 3px var(--accent-gold);
+    }
+}
+
+/* Reduced motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+
+    .dark-mode-toggle,
+    .toggle-icon {
+        transition: none;
+    }
+
+    .sun-icon,
+    .moon-icon {
+        animation: none;
+    }
+}

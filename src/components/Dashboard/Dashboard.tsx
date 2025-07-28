@@ -1,7 +1,7 @@
 import { Award, BookOpen, Clock, Coins, Crown, Info, Lightbulb, Lock, Star, Trophy, Zap } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { PREMIUM } from '../../constants';
+import { PREMIUM } from '../../constants/index';
 import { useUser } from '../../contexts';
 import { educationalService } from '../../services/education';
 import type { EducationalContent, UserProfile } from '../../types';

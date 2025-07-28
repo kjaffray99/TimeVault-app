@@ -177,6 +177,9 @@ export const ANALYTICS_EVENTS = {
     SUBSCRIPTION_STARTED: 'subscription_started',
     TRIAL_STARTED: 'trial_started',
     FEATURE_ACCESSED: 'premium_feature_accessed',
+    PREMIUM_CHECKOUT_INITIATED: 'premium_checkout_initiated',
+    PREMIUM_SUBSCRIPTION_COMPLETED: 'premium_subscription_completed',
+    PREMIUM_CHECKOUT_FAILED: 'premium_checkout_failed',
 
     // NFT Events
     MINT_INITIATED: 'nft_mint_initiated',

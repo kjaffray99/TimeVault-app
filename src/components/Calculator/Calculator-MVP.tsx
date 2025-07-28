@@ -1,8 +1,9 @@
 import { Calculator as CalculatorIcon, Crown, RefreshCw, TrendingUp, Zap } from 'lucide-react';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { useAnalytics } from '../../hooks/useAnalytics';
 import { useApi } from '../../hooks/useApi';
 import { useDebounce } from '../../hooks/useDebounce';
+import { sanitizeCalculatorInput, sanitizeCryptoSymbol } from '../../security';
 import type { CryptoAsset } from '../../types';
 import './Calculator.css';
 
@@ -102,35 +103,38 @@ const Calculator: React.FC<CalculatorProps> = ({ className = '' }) => {
         track('calculator_loaded');
     }, [track]);
 
-    // Calculate conversion results
+    // Calculate conversion results with optimized memoization
     const conversionResult = useMemo((): ConversionResult | null => {
         if (!selectedAsset || !debouncedAmount || isNaN(Number(debouncedAmount))) {
             return null;
         }
 
         const inputAmount = Number(debouncedAmount);
-        const usdValue = (selectedAsset.current_price || selectedAsset.price || 0) * inputAmount;
+        const assetPrice = selectedAsset.current_price || selectedAsset.price || 0;
+        const usdValue = assetPrice * inputAmount;
 
-        // Get metal prices with fallbacks
-        const goldPrice = metalPrices.find(m => m.metal === 'gold')?.price || 2050;
-        const silverPrice = metalPrices.find(m => m.metal === 'silver')?.price || 24;
-        const platinumPrice = metalPrices.find(m => m.metal === 'platinum')?.price || 1000;
-        const palladiumPrice = metalPrices.find(m => m.metal === 'palladium')?.price || 1500;
-
-        // Calculate metal conversions
-        const metals = {
-            gold: { amount: usdValue / goldPrice, unit: 'oz' },
-            silver: { amount: usdValue / silverPrice, unit: 'oz' },
-            platinum: { amount: usdValue / platinumPrice, unit: 'oz' },
-            palladium: { amount: usdValue / palladiumPrice, unit: 'oz' }
+        // Memoized metal price lookup with fallbacks
+        const metalPriceLookup = {
+            gold: metalPrices.find(m => m.metal === 'gold')?.price || 2050,
+            silver: metalPrices.find(m => m.metal === 'silver')?.price || 24,
+            platinum: metalPrices.find(m => m.metal === 'platinum')?.price || 1000,
+            palladium: metalPrices.find(m => m.metal === 'palladium')?.price || 1500
         };
 
-        // Calculate time equivalent
+        // Optimized metal conversions calculation
+        const metals = {
+            gold: { amount: usdValue / metalPriceLookup.gold, unit: 'oz' },
+            silver: { amount: usdValue / metalPriceLookup.silver, unit: 'oz' },
+            platinum: { amount: usdValue / metalPriceLookup.platinum, unit: 'oz' },
+            palladium: { amount: usdValue / metalPriceLookup.palladium, unit: 'oz' }
+        };
+
+        // Pre-calculated time constants for better performance
         const totalHours = usdValue / hourlyWage;
         const timeValue = {
             hours: totalHours,
-            days: totalHours / 8, // 8-hour work days
-            weeks: totalHours / 40 // 40-hour work weeks
+            days: totalHours * 0.125, // 1/8 for 8-hour work days
+            weeks: totalHours * 0.025 // 1/40 for 40-hour work weeks
         };
 
         return {
@@ -142,47 +146,60 @@ const Calculator: React.FC<CalculatorProps> = ({ className = '' }) => {
         };
     }, [selectedAsset, debouncedAmount, metalPrices, hourlyWage]);
 
-    // Handle amount input changes
-    const handleAmountChange = (value: string) => {
-        setAmount(value);
-        track('calculator_amount_changed', {
-            amount: value,
-            asset: selectedAsset?.symbol || 'unknown'
-        });
-    };
+    // Optimized input handler with useCallback for stable reference
+    const handleAmountChange = useCallback((value: string) => {
+        const sanitized = sanitizeCalculatorInput(value);
 
-    // Handle asset selection
-    const handleAssetChange = (asset: CryptoAsset) => {
-        setSelectedAsset(asset);
-        track('calculator_asset_changed', {
-            asset: asset.symbol,
-            price: asset.current_price || asset.price || 0
-        });
-    };
+        if (sanitized.isValid && sanitized.sanitizedValue !== null) {
+            setAmount(sanitized.sanitizedValue.toString());
+            track('calculator_amount_changed', {
+                amount: sanitized.sanitizedValue,
+                asset: selectedAsset?.symbol || 'unknown'
+            });
+        } else {
+            // Handle invalid input gracefully
+            if (sanitized.errors.length > 0) {
+                console.warn('Invalid calculator input:', sanitized.errors);
+            }
+        }
+    }, [track, selectedAsset]);
 
-    // Handle premium upsell interactions
-    const handlePremiumClick = (source: string) => {
+    // Optimized asset selection handler with useCallback
+    const handleAssetChange = useCallback((asset: CryptoAsset) => {
+        // Sanitize asset symbol for security
+        const sanitizedSymbol = sanitizeCryptoSymbol(asset.symbol);
+        if (sanitizedSymbol.isValid) {
+            setSelectedAsset(asset);
+            track('calculator_asset_changed', {
+                asset: sanitizedSymbol.sanitizedValue,
+                price: asset.current_price || asset.price || 0
+            });
+        }
+    }, [track]);
+
+    // Optimized premium handler with useCallback
+    const handlePremiumClick = useCallback((source: string) => {
         trackPremiumInterest(source, {
             calculator_value: conversionResult?.usdValue || 0
         });
         setShowPremiumUpsell(true);
-    };
+    }, [trackPremiumInterest, conversionResult?.usdValue]);
 
-    // Format currency values
-    const formatCurrency = (value: number): string => {
+    // Memoized currency formatter for better performance
+    const formatCurrency = useCallback((value: number): string => {
         return new Intl.NumberFormat('en-US', {
             style: 'currency',
             currency: 'USD'
         }).format(value);
-    };
+    }, []);
 
-    // Format metal amounts
-    const formatMetal = (amount: number): string => {
+    // Memoized metal formatter for better performance
+    const formatMetal = useCallback((amount: number): string => {
         if (amount < 0.01) {
             return amount.toExponential(2);
         }
         return amount.toFixed(4);
-    };
+    }, []);
 
     if (isLoading) {
         return (
@@ -411,4 +428,5 @@ const Calculator: React.FC<CalculatorProps> = ({ className = '' }) => {
     );
 };
 
-export default Calculator;
+// Export memoized component for better performance
+export default memo(Calculator);

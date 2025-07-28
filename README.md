@@ -177,9 +177,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🆘 Support
 
-- **Documentation**: [docs.timevault.app](https://docs.timevault.app)
+- **Documentation**: [docs.timevaultai.com](https://docs.timevaultai.com)
 - **Discord**: [Join our community](https://discord.gg/timevault)
-- **Email**: support@timevault.app
+- **Email**: support@timevaultai.com
 
 ## 🙏 Acknowledgments
 

@@ -2,7 +2,8 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
+  <meta charset <script type="module" src="/src/main-day1.tsx">
+  </script>"UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/vite.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description"
@@ -16,13 +17,25 @@
   <meta property="og:description"
     content="Transform your digital assets into precious metals and personal time equivalents" />
   <meta property="og:type" content="website" />
-  <meta property="og:image" content="/og-image.png" />
+  <meta property="og:url" content="https://timevaultai.com" />
+  <meta property="og:image" content="https://timevaultai.com/og-image.png" />
+  <meta property="og:site_name" content="TimeVault" />
 
   <!-- Twitter Meta Tags -->
   <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@TimeVaultAI" />
   <meta name="twitter:title" content="TimeVault - Digital Asset Value Calculator" />
   <meta name="twitter:description"
     content="Transform your digital assets into precious metals and personal time equivalents" />
+  <meta name="twitter:image" content="https://timevaultai.com/og-image.png" />
+  <meta name="twitter:url" content="https://timevaultai.com" />
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://timevaultai.com" />
+
+  <!-- DNS Prefetch and Preconnect -->
+  <link rel="dns-prefetch" href="//api.coingecko.com" />
+  <link rel="dns-prefetch" href="//api.metals.live" />
 
   <!-- Preload critical fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -30,7 +43,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- Preload critical resources -->
-  <link rel="preload" href="/src/main.tsx" as="script" crossorigin="anonymous">
+  <link rel="preload" href="/src/main-day2.tsx" as="script" crossorigin="anonymous">
 
   <title>TimeVault - Digital Asset Value Calculator</title>
 
@@ -46,7 +59,7 @@
 
 <body>
   <div id="root"></div>
-  <script type="module" src="/src/main.tsx"></script>
+  <script type="module" src="/src/main-day2.tsx"></script>
 </body>
 
 </html>

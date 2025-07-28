@@ -73,11 +73,11 @@ You have the right to:
 ## Contact Information
 
 ### Privacy Rights Requests
-Email: privacy@timevault.app
+Email: privacy@timevaultai.com
 Response Time: 30 days maximum
 
 ### General Inquiries
-Email: legal@timevault.app
+Email: legal@timevaultai.com
 Phone: [To be assigned]
 
 ## Changes to This Policy

@@ -12,8 +12,11 @@ const API_CONFIG = {
     METALS_BASE: import.meta.env.VITE_METALS_API_URL || 'https://api.metals.live/v1',
     COINGECKO_API_KEY: import.meta.env.VITE_COINGECKO_API_KEY || '', // Optional for demo
     TIMEOUT: parseInt(import.meta.env.VITE_API_TIMEOUT || '10000'),
-    CACHE_DURATION: 5 * 60 * 1000, // 5 minutes
-    DEMO_MODE: !import.meta.env.VITE_COINGECKO_API_KEY, // Use demo data if no API key
+    CACHE_DURATION: parseInt(import.meta.env.VITE_CACHE_DURATION || '300000'), // 5 minutes default
+    RATE_LIMIT_MAX: parseInt(import.meta.env.VITE_RATE_LIMIT_MAX || '50'),
+    RATE_LIMIT_WINDOW: 60000, // 1 minute window
+    DEMO_MODE: import.meta.env.VITE_CACHE_ENABLED !== 'true', // Use demo data if caching not enabled
+    ENHANCED_SECURITY: import.meta.env.VITE_ENHANCED_SECURITY === 'true',
 };
 
 interface ApiState {
@@ -29,11 +32,43 @@ interface CachedData {
     timestamp: number;
 }
 
-// Simple cache implementation
+// Rate limiting implementation
+class RateLimiter {
+    private requests: number[] = [];
+
+    canMakeRequest(): boolean {
+        const now = Date.now();
+        // Remove requests older than the window
+        this.requests = this.requests.filter(time => now - time < API_CONFIG.RATE_LIMIT_WINDOW);
+
+        if (this.requests.length >= API_CONFIG.RATE_LIMIT_MAX) {
+            return false;
+        }
+
+        this.requests.push(now);
+        return true;
+    }
+
+    getTimeUntilNextRequest(): number {
+        if (this.requests.length < API_CONFIG.RATE_LIMIT_MAX) return 0;
+
+        const oldestRequest = Math.min(...this.requests);
+        return API_CONFIG.RATE_LIMIT_WINDOW - (Date.now() - oldestRequest);
+    }
+}
+
+const rateLimiter = new RateLimiter();
+
+// Enhanced cache implementation with security
 class SimpleCache {
     private cache = new Map<string, CachedData>();
 
     set(key: string, data: any): void {
+        // Input sanitization for enhanced security
+        if (API_CONFIG.ENHANCED_SECURITY && typeof data === 'string') {
+            data = this.sanitizeData(data);
+        }
+
         this.cache.set(key, {
             data,
             timestamp: Date.now()
@@ -55,6 +90,11 @@ class SimpleCache {
     clear(): void {
         this.cache.clear();
     }
+
+    private sanitizeData(data: string): string {
+        // Basic XSS protection
+        return data.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
+    }
 }
 
 const cache = new SimpleCache();
@@ -74,7 +114,22 @@ export const useApi = () => {
         const cached = cache.get(cacheKey);
         if (cached) return cached;
 
+        // Check rate limiting
+        if (!rateLimiter.canMakeRequest()) {
+            const waitTime = rateLimiter.getTimeUntilNextRequest();
+            throw new Error(`Rate limit exceeded. Please wait ${Math.ceil(waitTime / 1000)} seconds.`);
+        }
+
         try {
+            const headers: any = {
+                'Accept': 'application/json',
+            };
+
+            // Add API key if available for higher rate limits
+            if (API_CONFIG.COINGECKO_API_KEY) {
+                headers['x-cg-demo-api-key'] = API_CONFIG.COINGECKO_API_KEY;
+            }
+
             const response = await axios.get(
                 `${API_CONFIG.COINGECKO_BASE}/coins/markets`,
                 {
@@ -87,6 +142,7 @@ export const useApi = () => {
                         sparkline: false,
                         price_change_percentage: '24h'
                     },
+                    headers,
                     timeout: API_CONFIG.TIMEOUT
                 }
             );

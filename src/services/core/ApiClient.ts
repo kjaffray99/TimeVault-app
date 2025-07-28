@@ -1,10 +1,11 @@
 import type { AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 import axios from 'axios';
+import { securityManager } from '../../security/SecurityManager';
 import { RequestTracker } from './RequestTracker';
 
 /**
- * Enterprise-grade API client focused on customer experience and reliability
- * Handles retries, caching, and graceful degradation for optimal user experience
+ * Enterprise-grade API client focused on customer experience and security
+ * Handles retries, caching, security validation, and graceful degradation
  */
 
 export interface ApiClientOptions {
@@ -135,6 +136,9 @@ export class ApiClient {
     private handleRequest(config: InternalAxiosRequestConfig): InternalAxiosRequestConfig {
         const endpoint = config.url || 'unknown';
 
+        // Security validation
+        this.validateRequest(config);
+
         // Check rate limits with customer experience priority
         if (!this.requestTracker.canMakeRequest(endpoint, this.options.priority)) {
             throw new Error('Service temporarily busy. Please try again in a moment.');
@@ -149,6 +153,9 @@ export class ApiClient {
 
         // Add API keys securely
         this.addApiKeys(config);
+
+        // Add security headers
+        this.addSecurityHeaders(config);
 
         this.metrics.totalRequests++;
 
@@ -279,6 +286,37 @@ export class ApiClient {
     }
 
     // Private helper methods
+    private validateRequest(config: InternalAxiosRequestConfig): void {
+        // Validate request size
+        const maxSize = securityManager.getMaxRequestSize();
+        if (config.data && JSON.stringify(config.data).length > maxSize) {
+            throw new Error('Request too large');
+        }
+
+        // Validate URL domain
+        if (config.url && !this.isAllowedDomain(config.url)) {
+            throw new Error('Unauthorized domain');
+        }
+    }
+
+    private isAllowedDomain(url: string): boolean {
+        try {
+            const urlObj = new URL(url, this.options.baseURL);
+            return securityManager.validateDomain(urlObj.hostname);
+        } catch {
+            return false;
+        }
+    }
+
+    private addSecurityHeaders(config: InternalAxiosRequestConfig): void {
+        // Add security headers for API requests
+        config.headers.set('X-Requested-With', 'XMLHttpRequest');
+        config.headers.set('X-TimeVault-Client', 'Web-App');
+
+        // Add timestamp for request validation
+        config.headers.set('X-Request-Time', Date.now().toString());
+    }
+
     private addApiKeys(config: InternalAxiosRequestConfig): void {
         if (config.url?.includes('coingecko') &&
             import.meta.env.VITE_COINGECKO_API_KEY &&

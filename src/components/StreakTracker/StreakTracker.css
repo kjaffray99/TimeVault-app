@@ -1,0 +1,232 @@
+/* TVLT Streak Tracker Component Styles */
+.streak-tracker {
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    border: 2px solid var(--accent-gold);
+    border-radius: 16px;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.streak-tracker::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent-gold), #F4E98A, var(--accent-gold));
+}
+
+.streak-header {
+    display: flex;
+    align-items: center;
+    justify-content: between;
+    margin-bottom: 1rem;
+}
+
+.streak-icon {
+    padding: 0.75rem;
+    background: linear-gradient(135deg, #FFF7ED, #FFEDD5);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.streak-number {
+    text-align: center;
+    margin-left: auto;
+}
+
+.streak-stats {
+    gap: 1rem;
+}
+
+.stat-card {
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 12px;
+    padding: 1rem;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(212, 175, 55, 0.15);
+}
+
+.weekly-progress {
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 12px;
+    padding: 1rem;
+    border: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: #E5E7EB;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #10B981, #34D399);
+    border-radius: 4px;
+    transition: width 0.5s ease;
+}
+
+.badges-section {
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 12px;
+    padding: 1rem;
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    margin-bottom: 1rem;
+}
+
+.badges-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 0.75rem;
+}
+
+.badge-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #374151;
+    border: 1px solid rgba(212, 175, 55, 0.1);
+    transition: all 0.3s ease;
+}
+
+.badge-item:hover {
+    transform: scale(1.05);
+    border-color: var(--accent-gold);
+}
+
+.badge-icon {
+    font-size: 1rem;
+}
+
+.badge-name {
+    flex: 1;
+    text-align: center;
+}
+
+.motivation-section {
+    margin-top: 1rem;
+}
+
+.motivation-card {
+    background: linear-gradient(135deg, #FEF3C7, #FDE68A);
+    border: 1px solid #F59E0B;
+    border-radius: 12px;
+    padding: 1rem;
+}
+
+.premium-hint {
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 8px;
+    border: 1px solid #F97316;
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+    .streak-tracker {
+        padding: 1rem;
+    }
+
+    .streak-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .streak-number {
+        margin-left: 0;
+        align-self: center;
+    }
+
+    .badges-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Dark Mode Support */
+.dark-mode .streak-tracker {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    border-color: var(--accent-gold);
+}
+
+.dark-mode .stat-card,
+.dark-mode .weekly-progress,
+.dark-mode .badges-section {
+    background: rgba(0, 0, 0, 0.3);
+    border-color: rgba(212, 175, 55, 0.3);
+}
+
+.dark-mode .badge-item {
+    background: rgba(0, 0, 0, 0.4);
+    color: #F1F5F9;
+}
+
+.dark-mode .motivation-card {
+    background: linear-gradient(135deg, #92400e, #b45309);
+    border-color: var(--accent-gold);
+}
+
+.dark-mode .premium-hint {
+    background: rgba(0, 0, 0, 0.4);
+    border-color: var(--accent-gold);
+}
+
+/* Animations */
+@keyframes streakPulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+.streak-tracker:hover .streak-icon {
+    animation: streakPulse 2s ease-in-out infinite;
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+
+    .streak-tracker *,
+    .streak-tracker *::before,
+    .streak-tracker *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+    .streak-tracker {
+        border-width: 3px;
+    }
+
+    .stat-card,
+    .badge-item {
+        border-width: 2px;
+    }
+}

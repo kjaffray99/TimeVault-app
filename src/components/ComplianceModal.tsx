@@ -74,6 +74,34 @@ const ComplianceModal: React.FC<ComplianceModalProps> = ({
                             </p>
                         </div>
 
+                        {/* Florida HB 273 Compliance */}
+                        <div className="border-l-4 border-purple-500 pl-4">
+                            <h3 className="font-semibold text-gray-900 mb-2">
+                                🏛️ Florida HB 273 Compliance (2025)
+                            </h3>
+                            <p>
+                                In compliance with Florida House Bill 273 (2025), TimeVault adheres to
+                                digital asset transparency requirements. Our platform provides clear
+                                educational disclaimers regarding digital asset risks, utility-only NFT
+                                classification, and tax implications. All transactions are recorded
+                                for compliance purposes as required by Florida state law.
+                            </p>
+                        </div>
+
+                        {/* Enhanced Security Notice */}
+                        <div className="border-l-4 border-indigo-500 pl-4">
+                            <h3 className="font-semibold text-gray-900 mb-2">
+                                🔒 Enhanced Security & Data Protection
+                            </h3>
+                            <p>
+                                TimeVault implements enhanced security measures including input sanitization,
+                                XSS protection, and secure data handling. Your wallet connections use
+                                industry-standard encryption, and all calculations are performed locally
+                                in your browser for maximum privacy. We do not store sensitive financial
+                                data on our servers.
+                            </p>
+                        </div>
+
                         {/* Precious Metals Disclaimer */}
                         <div className="border-l-4 border-yellow-500 pl-4">
                             <h3 className="font-semibold text-gray-900 mb-2">

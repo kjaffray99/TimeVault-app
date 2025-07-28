@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Test</title>
+    <style>
+        body {
+            margin: 0;
+            background: linear-gradient(to bottom right, #001F3F, #003366);
+            color: white;
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+        }
+
+        .test-header {
+            background: rgba(212, 175, 55, 0.1);
+            padding: 20px;
+            text-align: center;
+            border-bottom: 2px solid #D4AF37;
+        }
+
+        .test-content {
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .test-button {
+            background: #D4AF37;
+            color: #001F3F;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="test-header">
+        <h1>🔧 TimeVault Debug Test</h1>
+        <p>If you can see this, HTML/CSS is working</p>
+    </div>
+
+    <div class="test-content">
+        <h2>Static HTML Test</h2>
+        <p>This is a static HTML file with TimeVault styling</p>
+        <button class="test-button" onclick="testJS()">Test JavaScript</button>
+        <div id="js-result"></div>
+
+        <div style="margin-top: 40px;">
+            <h3>What should appear on the main app:</h3>
+            <ul style="text-align: left; max-width: 400px; margin: 0 auto;">
+                <li>Header with Calculator/Dashboard/Premium tabs</li>
+                <li>Main content area with calculator</li>
+                <li>Footer with social links</li>
+                <li>OR Compliance modal</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function testJS() {
+            document.getElementById('js-result').innerHTML =
+                '<p style="color: #D4AF37; margin-top: 20px;">✅ JavaScript is working!</p>';
+        }
+
+        console.log('Debug page loaded successfully');
+        console.log('If the main app shows only blue background, React/components have an issue');
+    </script>
+</body>
+
+</html>

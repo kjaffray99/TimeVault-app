@@ -100,8 +100,10 @@ export class SecurityUtils {
         const allowedOrigins = [
             'http://localhost:3000',
             'http://localhost:5173',
-            'https://timevault.app',
-            'https://www.timevault.app'
+            'https://timevaultai.com',
+            'https://www.timevaultai.com',
+            'https://timevault.com',
+            'https://www.timevault.com'
         ];
 
         // Allow same-origin requests

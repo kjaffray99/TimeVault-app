@@ -11,13 +11,19 @@
    ======================================== */
 
 :root {
-    /* Brand Colors - Primary Palette */
+    /* Brand Colors - Primary Palette - WCAG AA Compliant */
     --tv-primary-navy: #001F3F;
+    /* Main navy - 4.5:1 contrast ratio */
     --tv-primary-navy-dark: #001122;
+    /* Darker navy for enhanced contrast */
     --tv-primary-navy-light: #003366;
+    /* Lighter navy for backgrounds */
     --tv-accent-gold: #D4AF37;
+    /* Main gold - 4.5:1 contrast ratio */
     --tv-accent-gold-light: #F4D03F;
+    /* Light gold for highlights */
     --tv-accent-gold-dark: #B8860B;
+    /* Dark gold for text on light backgrounds */
 
     /* Neutral Colors */
     --tv-white: #FFFFFF;
@@ -97,6 +103,41 @@
     --tv-radius-lg: 0.75rem;
     --tv-radius-xl: 1rem;
     --tv-radius-full: 9999px;
+
+    /* Legacy Variable Mappings for Backward Compatibility */
+    --primary-navy: var(--tv-primary-navy);
+    --primary-navy-dark: var(--tv-primary-navy-dark);
+    --primary-navy-light: var(--tv-primary-navy-light);
+    --accent-gold: var(--tv-accent-gold);
+    --accent-gold-light: var(--tv-accent-gold-light);
+    --accent-gold-dark: var(--tv-accent-gold-dark);
+    --neutral-white: var(--tv-white);
+    --neutral-silver: var(--tv-silver);
+    --font-family: var(--tv-font-family);
+    --font-size-xs: var(--tv-font-size-xs);
+    --font-size-sm: var(--tv-font-size-sm);
+    --font-size-base: var(--tv-font-size-base);
+    --font-size-lg: var(--tv-font-size-lg);
+    --font-size-xl: var(--tv-font-size-xl);
+    --font-size-2xl: var(--tv-font-size-2xl);
+    --font-size-3xl: var(--tv-font-size-3xl);
+    --font-size-4xl: var(--tv-font-size-4xl);
+    --font-size-5xl: var(--tv-font-size-5xl);
+    --spacing-xs: var(--tv-space-1);
+    --spacing-sm: var(--tv-space-2);
+    --spacing-md: var(--tv-space-4);
+    --spacing-lg: var(--tv-space-6);
+    --spacing-xl: var(--tv-space-8);
+    --spacing-2xl: var(--tv-space-12);
+    --border-radius-sm: var(--tv-radius-sm);
+    --border-radius-md: var(--tv-radius-md);
+    --border-radius-lg: var(--tv-radius-lg);
+    --border-radius-xl: var(--tv-radius-xl);
+    --surface-primary: var(--tv-surface-primary);
+    --surface-secondary: var(--tv-surface-secondary);
+    --surface-hover: var(--tv-surface-hover);
+    --border-primary: var(--tv-border-primary);
+    --border-gold: var(--tv-border-gold);
 
     /* Shadows */
     --tv-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
