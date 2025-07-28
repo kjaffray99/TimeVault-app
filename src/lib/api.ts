@@ -81,11 +81,16 @@ export async function getCryptoPrices(cryptoIds: string[] = ['bitcoin', 'ethereu
         return data;
     } catch (error) {
         console.error('Failed to fetch crypto prices:', error);
-        // Return mock data for SSR reliability
-        return [
+        // Enhanced fallback data with all supported cryptos for immediate functionality
+        const fallbackPrices = [
             { id: 'bitcoin', symbol: 'btc', name: 'Bitcoin', current_price: 97500, price_change_24h: 1200, price_change_percentage_24h: 1.25, market_cap: 1900000000000, last_updated: new Date().toISOString() },
             { id: 'ethereum', symbol: 'eth', name: 'Ethereum', current_price: 3400, price_change_24h: -45, price_change_percentage_24h: -1.3, market_cap: 410000000000, last_updated: new Date().toISOString() },
+            { id: 'ripple', symbol: 'xrp', name: 'XRP', current_price: 2.45, price_change_24h: 0.012, price_change_percentage_24h: 0.5, market_cap: 140000000000, last_updated: new Date().toISOString() },
+            { id: 'cardano', symbol: 'ada', name: 'Cardano', current_price: 1.12, price_change_24h: -0.009, price_change_percentage_24h: -0.8, market_cap: 40000000000, last_updated: new Date().toISOString() },
+            { id: 'solana', symbol: 'sol', name: 'Solana', current_price: 245, price_change_24h: 7.6, price_change_percentage_24h: 3.2, market_cap: 115000000000, last_updated: new Date().toISOString() },
+            { id: 'dogecoin', symbol: 'doge', name: 'Dogecoin', current_price: 0.38, price_change_24h: 0.006, price_change_percentage_24h: 1.6, market_cap: 56000000000, last_updated: new Date().toISOString() }
         ];
+        return fallbackPrices.filter(crypto => cryptoIds.includes(crypto.id));
     }
 }
 

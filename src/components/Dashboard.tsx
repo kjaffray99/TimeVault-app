@@ -180,8 +180,8 @@ export default function Dashboard({ initialCryptoPrices, initialMetalPrices }: D
                                     key={tab.id}
                                     onClick={() => setActiveTab(tab.id)}
                                     className={`flex items-center px-6 py-3 rounded-lg font-medium transition-all ${isActive
-                                            ? 'bg-yellow-400 text-blue-900'
-                                            : 'bg-blue-700/50 text-white hover:bg-blue-600/50'
+                                        ? 'bg-yellow-400 text-blue-900'
+                                        : 'bg-blue-700/50 text-white hover:bg-blue-600/50'
                                         }`}
                                 >
                                     <Icon size={20} className={`mr-2 ${isActive ? 'text-blue-900' : tab.color}`} />

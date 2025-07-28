@@ -24,11 +24,26 @@ export const metadata: Metadata = {
 
 // This is a Server Component - data is fetched server-side for SEO
 export default async function HomePage() {
-  // Fetch crypto and metal prices server-side for immediate SEO content
-  const [cryptoPrices, metalPrices] = await Promise.all([
-    getCryptoPrices(['bitcoin', 'ethereum', 'ripple', 'cardano', 'solana']),
-    getMetalPrices()
-  ]);
+  // Fetch crypto and metal prices server-side with fallbacks for instant load
+  let cryptoPrices, metalPrices;
+
+  try {
+    [cryptoPrices, metalPrices] = await Promise.all([
+      getCryptoPrices(['bitcoin', 'ethereum', 'ripple', 'cardano', 'solana']),
+      getMetalPrices()
+    ]);
+  } catch (error) {
+    // Fallback data for immediate content rendering
+    console.log('Using fallback data for SSR:', error);
+    cryptoPrices = [
+      { id: 'bitcoin', symbol: 'btc', name: 'Bitcoin', current_price: 97500, price_change_percentage_24h: 2.5, market_cap: 1900000000000, last_updated: new Date().toISOString(), price_change_24h: 2375 },
+      { id: 'ethereum', symbol: 'eth', name: 'Ethereum', current_price: 3400, price_change_percentage_24h: 1.8, market_cap: 410000000000, last_updated: new Date().toISOString(), price_change_24h: 60 },
+      { id: 'ripple', symbol: 'xrp', name: 'XRP', current_price: 2.45, price_change_percentage_24h: 0.5, market_cap: 140000000000, last_updated: new Date().toISOString(), price_change_24h: 0.012 },
+      { id: 'cardano', symbol: 'ada', name: 'Cardano', current_price: 1.12, price_change_percentage_24h: -0.8, market_cap: 40000000000, last_updated: new Date().toISOString(), price_change_24h: -0.009 },
+      { id: 'solana', symbol: 'sol', name: 'Solana', current_price: 245, price_change_percentage_24h: 3.2, market_cap: 115000000000, last_updated: new Date().toISOString(), price_change_24h: 7.6 }
+    ];
+    metalPrices = { gold: 2650, silver: 29.50, timestamp: new Date().toISOString() };
+  }
 
   // Generate sample calculations for SEO content
   const btcSampleCalc = {
