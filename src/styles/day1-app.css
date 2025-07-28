@@ -524,3 +524,110 @@
         transform: none;
     }
 }
+
+/* Optimized Calculator Styles */
+.optimized-calculator {
+    background: linear-gradient(135deg, rgba(0, 31, 63, 0.95), rgba(0, 40, 85, 0.95));
+    border: 2px solid #D4AF37;
+    border-radius: 16px;
+    padding: 2rem;
+    margin: 2rem auto;
+    max-width: 600px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+}
+
+.calculator-inputs {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.crypto-input,
+.wage-input {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(212, 175, 55, 0.3);
+    border-radius: 8px;
+    padding: 1rem;
+    color: #FFFFFF;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+}
+
+.crypto-input:focus,
+.wage-input:focus {
+    outline: none;
+    border-color: #D4AF37;
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
+}
+
+.crypto-select {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(212, 175, 55, 0.3);
+    border-radius: 8px;
+    padding: 1rem;
+    color: #FFFFFF;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+}
+
+.crypto-select:focus {
+    outline: none;
+    border-color: #D4AF37;
+}
+
+.crypto-select option {
+    background: #001F3F;
+    color: #FFFFFF;
+}
+
+.calculation-results {
+    text-align: center;
+    background: rgba(212, 175, 55, 0.1);
+    border-radius: 12px;
+    padding: 2rem;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+}
+
+.time-display {
+    margin-bottom: 1.5rem;
+}
+
+.time-display .hours {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #D4AF37;
+    display: block;
+}
+
+.time-display .unit {
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin-top: 0.5rem;
+}
+
+.share-btn {
+    background: linear-gradient(45deg, #D4AF37, #FFD700);
+    color: #001F3F;
+    border: none;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 16px rgba(212, 175, 55, 0.3);
+}
+
+.share-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+}
+
+@media (min-width: 768px) {
+    .calculator-inputs {
+        grid-template-columns: 1fr 2fr 1fr;
+        align-items: end;
+    }
+}

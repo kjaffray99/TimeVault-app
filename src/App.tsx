@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
-import Calculator from './components/Calculator/Calculator'; // Fixed: Using main Calculator
+import Calculator from './components/Calculator/Calculator';
 import ComplianceModal from './components/ComplianceModal';
 import Dashboard from './components/Dashboard/Dashboard';
 import DebugTest from './components/DebugTest';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import Footer from './components/Footer/Footer';
 import Header from './components/Header/Header';
+import OptimizedPersonalTimeCalculator from './components/OptimizedPersonalTimeCalculator';
 import Premium from './components/Premium/Premium';
 import { UserProvider } from './contexts';
 import { useAnalytics } from './hooks/useAnalytics';
+import { monitoring } from './services/monitoringService';
+import './styles/day1-app.css';
 
 // Revenue-critical fallback calculator
 const FallbackCalculator = () => (
@@ -71,6 +74,10 @@ function App() {
 
   useEffect(() => {
     console.log('🔍 Checking compliance status...');
+
+    // Initialize monitoring service
+    monitoring.startMonitoring();
+    console.log('📊 Performance monitoring started');
 
     // Check for debug mode in URL
     const urlParams = new URLSearchParams(window.location.search);
@@ -192,7 +199,21 @@ function App() {
                 <ErrorBoundary>
                   {activeTab === 'calculator' && (
                     <React.Suspense fallback={<FallbackCalculator />}>
-                      <Calculator />
+                      <div>
+                        <Calculator />
+                        <OptimizedPersonalTimeCalculator
+                          onShare={(result) => {
+                            track('optimized_calculator_share', {
+                              crypto_value: result.cryptoValue,
+                              hours_of_work: result.hoursOfWork
+                            });
+                          }}
+                          onPremiumTrigger={(trigger) => {
+                            track('premium_trigger', { trigger });
+                            setActiveTab('premium');
+                          }}
+                        />
+                      </div>
                     </React.Suspense>
                   )}
                   {activeTab === 'dashboard' && (

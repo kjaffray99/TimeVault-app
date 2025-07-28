@@ -34,14 +34,14 @@ export default defineConfig({
           // Charts chunk (conditional loading)
           'charts': ['recharts']
         },
-        chunkFileNames: (chunkInfo) => {
+        chunkFileNames: () => {
           // Optimize chunk naming for caching
           return `js/[name]-[hash].js`;
         },
         assetFileNames: (assetInfo) => {
           // Optimize asset naming for caching
           const info = assetInfo.name?.split('.') || [];
-          const ext = info[info.length - 1];
+          const _ext = info[info.length - 1];
           if (/\.(png|jpe?g|svg|gif|tiff|bmp|ico)$/i.test(assetInfo.name || '')) {
             return `img/[name]-[hash][extname]`;
           }
