@@ -1,8 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    experimental: {
-        appDir: true
-    },
     images: {
         domains: ['api.coingecko.com', 'assets.coingecko.com', 'timevaultai.com'],
         formats: ['image/webp', 'image/avif']
