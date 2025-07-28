@@ -1,3 +1,18 @@
 {
-  "framework": "nextjs"
+  "framework": "nextjs",
+  "build": {
+    "env": {
+      "NODE_ENV": "production"
+    }
+  },
+  "buildCommand": "npm run build",
+  "outputDirectory": ".next",
+  "functions": {
+    "app/api/og/calculator/route.ts": {
+      "maxDuration": 10
+    },
+    "app/api/og/homepage/route.ts": {
+      "maxDuration": 10
+    }
+  }
 }
