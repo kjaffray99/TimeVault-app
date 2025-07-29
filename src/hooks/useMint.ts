@@ -19,8 +19,9 @@ export const useMintableAssets = () => {
         const fetchAssets = async () => {
             try {
                 setIsLoading(true);
-                // Using a default wallet address for now - in production this would come from wallet context
-                const availableAssets = await blockchainService.getAvailableAssets('0x0000000000000000000000000000000000000000');
+                // Using environment variable for wallet address
+                const defaultWallet = process.env.NEXT_PUBLIC_DEFAULT_WALLET || '0x0000000000000000000000000000000000000000';
+                const availableAssets = await blockchainService.getAvailableAssets(defaultWallet);
                 setAssets(availableAssets);
                 setError(undefined);
             } catch (err: any) {
@@ -38,8 +39,9 @@ export const useMintableAssets = () => {
     const refreshAssets = useCallback(async () => {
         try {
             setIsLoading(true);
-            // Using a default wallet address for now - in production this would come from wallet context
-            const availableAssets = await blockchainService.getAvailableAssets('0x0000000000000000000000000000000000000000');
+            // Using environment variable for wallet address
+            const defaultWallet = process.env.NEXT_PUBLIC_DEFAULT_WALLET || '0x0000000000000000000000000000000000000000';
+            const availableAssets = await blockchainService.getAvailableAssets(defaultWallet);
             setAssets(availableAssets);
             setError(undefined);
         } catch (err: any) {

@@ -1,0 +1,427 @@
+/**
+ * TimeVault Gold/Blue Theme Consistency Fix - MAIN PROJECT
+ * Professional branding across all components for maximum conversion
+ */
+
+/* ========================================
+   BRAND COLOR VARIABLES - REVENUE OPTIMIZED
+   ======================================== */
+:root {
+    /* Primary Brand Colors - Conversion Optimized */
+    --tv-navy-primary: #001F3F;
+    --tv-navy-secondary: #002850;
+    --tv-gold-primary: #D4AF37;
+    --tv-gold-secondary: #B8941F;
+    --tv-white: #FFFFFF;
+    --tv-silver: #C0C0C0;
+
+    /* High-Converting CTA Colors */
+    --tv-cta-gold: #FFD700;
+    --tv-cta-hover: #FFC700;
+    --tv-premium-gradient: linear-gradient(135deg, #D4AF37 0%, #FFD700 100%);
+
+    /* Semantic Colors */
+    --tv-success: #10B981;
+    --tv-warning: #F59E0B;
+    --tv-error: #EF4444;
+    --tv-info: #3B82F6;
+
+    /* Interactive States - Engagement Optimized */
+    --tv-gold-hover: rgba(212, 175, 55, 0.1);
+    --tv-navy-hover: rgba(0, 31, 63, 0.1);
+    --tv-focus-ring: 0 0 0 3px rgba(212, 175, 55, 0.3);
+
+    /* Performance-Optimized Spacing */
+    --tv-space-1: 0.25rem;
+    --tv-space-2: 0.5rem;
+    --tv-space-3: 0.75rem;
+    --tv-space-4: 1rem;
+    --tv-space-6: 1.5rem;
+    --tv-space-8: 2rem;
+
+    /* Typography - Readability & Trust */
+    --tv-font-family: 'Inter', system-ui, sans-serif;
+    --tv-font-size-sm: 0.875rem;
+    --tv-font-size-base: 1rem;
+    --tv-font-size-lg: 1.125rem;
+    --tv-font-size-xl: 1.25rem;
+    --tv-font-size-2xl: 1.5rem;
+
+    /* Border Radius - Modern Feel */
+    --tv-radius-sm: 0.25rem;
+    --tv-radius-md: 0.5rem;
+    --tv-radius-lg: 0.75rem;
+    --tv-radius-xl: 1rem;
+
+    /* Shadows - Depth & Premium Feel */
+    --tv-shadow-sm: 0 1px 2px rgba(0, 31, 63, 0.1);
+    --tv-shadow-md: 0 4px 6px rgba(0, 31, 63, 0.1);
+    --tv-shadow-lg: 0 10px 15px rgba(0, 31, 63, 0.1);
+    --tv-shadow-xl: 0 20px 25px rgba(0, 31, 63, 0.1);
+}
+
+/* ========================================
+   REVENUE-OPTIMIZED COMPONENT STYLES
+   ======================================== */
+
+/* Calculator Component - Primary Conversion Tool */
+.calculator-container {
+    background: var(--tv-white);
+    border: 2px solid var(--tv-navy-primary);
+    border-radius: var(--tv-radius-lg);
+    box-shadow: var(--tv-shadow-lg);
+    overflow: hidden;
+    transition: transform 0.2s ease;
+}
+
+.calculator-container:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--tv-shadow-xl);
+}
+
+.calculator-header {
+    background: var(--tv-premium-gradient);
+    color: var(--tv-navy-primary);
+    padding: var(--tv-space-6);
+    font-weight: 700;
+    text-align: center;
+}
+
+.calculator-input {
+    border: 2px solid var(--tv-silver);
+    border-radius: var(--tv-radius-md);
+    padding: var(--tv-space-4);
+    font-family: var(--tv-font-family);
+    font-size: var(--tv-font-size-lg);
+    transition: all 0.2s ease;
+    width: 100%;
+}
+
+.calculator-input:focus {
+    outline: none;
+    border-color: var(--tv-gold-primary);
+    box-shadow: var(--tv-focus-ring);
+    transform: scale(1.02);
+}
+
+/* Premium CTA Buttons - Maximum Conversion */
+.premium-button,
+.cta-button {
+    background: var(--tv-premium-gradient);
+    color: var(--tv-navy-primary);
+    border: none;
+    border-radius: var(--tv-radius-md);
+    padding: var(--tv-space-4) var(--tv-space-8);
+    font-weight: 700;
+    font-size: var(--tv-font-size-lg);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: var(--tv-shadow-md);
+}
+
+.premium-button:hover,
+.cta-button:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: var(--tv-shadow-xl);
+    background: linear-gradient(135deg, var(--tv-cta-gold) 0%, var(--tv-cta-hover) 100%);
+}
+
+/* Quiz Component - Engagement Driver */
+.quiz-container {
+    background: var(--tv-white);
+    border-radius: var(--tv-radius-lg);
+    border: 2px solid var(--tv-navy-primary);
+    overflow: hidden;
+    box-shadow: var(--tv-shadow-lg);
+}
+
+.quiz-question {
+    background: var(--tv-navy-primary);
+    color: var(--tv-white);
+    padding: var(--tv-space-6);
+    font-size: var(--tv-font-size-xl);
+    font-weight: 600;
+    text-align: center;
+}
+
+.quiz-option {
+    padding: var(--tv-space-4);
+    border-bottom: 1px solid var(--tv-silver);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+
+.quiz-option:hover {
+    background: var(--tv-gold-hover);
+    transform: translateX(5px);
+}
+
+.quiz-option.selected {
+    background: var(--tv-gold-primary);
+    color: var(--tv-navy-primary);
+    font-weight: 700;
+}
+
+.quiz-option.correct {
+    background: var(--tv-success);
+    color: var(--tv-white);
+    animation: correctPulse 0.5s ease;
+}
+
+.quiz-option.incorrect {
+    background: var(--tv-error);
+    color: var(--tv-white);
+    animation: incorrectShake 0.5s ease;
+}
+
+/* TVLT Token Badge - Gamification */
+.tvlt-badge {
+    background: var(--tv-premium-gradient);
+    color: var(--tv-navy-primary);
+    padding: var(--tv-space-2) var(--tv-space-4);
+    border-radius: var(--tv-radius-xl);
+    font-weight: 700;
+    font-size: var(--tv-font-size-sm);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--tv-space-2);
+    box-shadow: var(--tv-shadow-sm);
+    animation: tvltGlow 2s ease-in-out infinite alternate;
+}
+
+/* Navigation - Clear UX */
+.nav-tabs {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    background: var(--tv-white);
+    border: 2px solid var(--tv-navy-primary);
+    border-radius: var(--tv-radius-lg);
+    padding: var(--tv-space-2);
+    gap: var(--tv-space-2);
+    box-shadow: var(--tv-shadow-md);
+}
+
+.nav-tab {
+    padding: var(--tv-space-3) var(--tv-space-4);
+    border: none;
+    border-radius: var(--tv-radius-md);
+    background: transparent;
+    color: var(--tv-navy-primary);
+    font-weight: 600;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--tv-space-2);
+}
+
+.nav-tab:hover {
+    background: var(--tv-gold-hover);
+    transform: translateY(-1px);
+}
+
+.nav-tab.active {
+    background: var(--tv-navy-primary);
+    color: var(--tv-white);
+    box-shadow: var(--tv-shadow-sm);
+}
+
+.nav-tab.premium.active {
+    background: var(--tv-premium-gradient);
+    color: var(--tv-navy-primary);
+}
+
+/* Performance Indicators */
+.performance-badge {
+    background: var(--tv-success);
+    color: var(--tv-white);
+    padding: var(--tv-space-1) var(--tv-space-3);
+    border-radius: var(--tv-radius-xl);
+    font-size: var(--tv-font-size-sm);
+    font-weight: 600;
+    animation: performancePulse 1.5s ease infinite;
+}
+
+/* ========================================
+   CONVERSION-OPTIMIZED ANIMATIONS
+   ======================================== */
+
+@keyframes correctPulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes incorrectShake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-5px);
+    }
+
+    75% {
+        transform: translateX(5px);
+    }
+}
+
+@keyframes tvltGlow {
+    0% {
+        box-shadow: var(--tv-shadow-sm);
+    }
+
+    100% {
+        box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+    }
+}
+
+@keyframes performancePulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.7;
+    }
+}
+
+/* ========================================
+   MOBILE-FIRST RESPONSIVE DESIGN
+   ======================================== */
+
+@media (max-width: 768px) {
+    .nav-tabs {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--tv-space-1);
+    }
+
+    .nav-tab {
+        padding: var(--tv-space-2) var(--tv-space-3);
+        font-size: var(--tv-font-size-sm);
+    }
+
+    .calculator-container {
+        margin: var(--tv-space-4);
+        border-radius: var(--tv-radius-md);
+    }
+
+    .calculator-header {
+        padding: var(--tv-space-4);
+        font-size: var(--tv-font-size-lg);
+    }
+
+    .premium-button,
+    .cta-button {
+        width: 100%;
+        padding: var(--tv-space-4);
+        font-size: var(--tv-font-size-base);
+    }
+}
+
+@media (max-width: 480px) {
+    .nav-tabs {
+        grid-template-columns: 1fr;
+    }
+
+    .nav-tab {
+        text-align: center;
+        padding: var(--tv-space-3);
+    }
+
+    .calculator-input {
+        font-size: var(--tv-font-size-base);
+        padding: var(--tv-space-3);
+    }
+}
+
+/* ========================================
+   ACCESSIBILITY & PERFORMANCE
+   ======================================== */
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+    :root {
+        --tv-navy-primary: #000000;
+        --tv-gold-primary: #FFD700;
+        --tv-white: #FFFFFF;
+    }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Focus styles for accessibility */
+*:focus-visible {
+    outline: 3px solid var(--tv-gold-primary);
+    outline-offset: 2px;
+}
+
+/* GPU acceleration for performance */
+.premium-button,
+.nav-tab,
+.quiz-option,
+.calculator-container {
+    transform: translateZ(0);
+    will-change: transform;
+}
+
+/* ========================================
+   DARK MODE SUPPORT
+   ======================================== */
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --tv-white: #1A1A1A;
+        --tv-navy-primary: #2D3748;
+        --tv-navy-secondary: #4A5568;
+        --tv-silver: #718096;
+    }
+
+    .calculator-container,
+    .quiz-container {
+        background: var(--tv-white);
+        color: #E2E8F0;
+        border-color: var(--tv-gold-primary);
+    }
+}
+
+/* ========================================
+   PRINT STYLES
+   ======================================== */
+
+@media print {
+
+    .premium-button,
+    .nav-tabs,
+    .tvlt-badge {
+        display: none !important;
+    }
+
+    .calculator-container {
+        border: 1px solid #000;
+        box-shadow: none;
+    }
+}

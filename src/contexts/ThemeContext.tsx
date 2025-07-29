@@ -35,6 +35,8 @@ interface ThemeProviderProps {
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
     // Check for saved theme preference or default to system preference
+    if (typeof window === 'undefined') return false; // SSR default
+
     const savedTheme = localStorage.getItem('timevault-theme');
     if (savedTheme) {
       return savedTheme === 'dark';
@@ -63,11 +65,15 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
     root.style.setProperty('--text-color', newTheme.text);
 
     // Save preference
-    localStorage.setItem('timevault-theme', isDarkMode ? 'dark' : 'light');
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('timevault-theme', isDarkMode ? 'dark' : 'light');
+    }
   }, [isDarkMode]);
 
   // Listen for system theme changes
   useEffect(() => {
+    if (typeof window === 'undefined') return; // SSR guard
+
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     const handleChange = (e: MediaQueryListEvent) => {
       // Only update if user hasn't manually set a preference

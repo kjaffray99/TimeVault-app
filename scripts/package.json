@@ -1,0 +1,10 @@
+{
+    "name": "deploy-production",
+    "version": "1.0.0",
+    "scripts": {
+        "deploy": "tsx deploy-production.ts",
+        "deploy:force": "tsx deploy-production.ts --force",
+        "verify": "tsx verify-deployment.ts"
+    },
+    "type": "module"
+}

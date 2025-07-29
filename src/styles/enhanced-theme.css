@@ -1,0 +1,324 @@
+/**
+ * Enhanced Gold/Blue Theme - Revenue Optimized
+ * Maximizes conversion through premium visual hierarchy
+ */
+
+:root {
+    /* Core Brand Colors - Revenue Psychology */
+    --primary-navy: #001F3F;
+    /* Trust, stability, premium feel */
+    --secondary-navy: #003366;
+    /* Depth, sophistication */
+    --accent-gold: #D4AF37;
+    /* Luxury, value, CTA highlights */
+    --premium-gold: #FFD700;
+    /* Premium features, upgrades */
+    --neutral-white: #FFFFFF;
+    /* Clean, modern */
+    --neutral-silver: #C0C0C0;
+    /* Secondary text */
+
+    /* Revenue-Optimized Gradients */
+    --gradient-primary: linear-gradient(135deg, var(--primary-navy) 0%, var(--secondary-navy) 100%);
+    --gradient-gold: linear-gradient(135deg, var(--accent-gold) 0%, var(--premium-gold) 100%);
+    --gradient-premium: linear-gradient(135deg, #D4AF37 0%, #F4D03F 50%, #FFD700 100%);
+
+    /* Engagement Colors */
+    --success-green: #10B981;
+    /* Positive calculations, achievements */
+    --warning-orange: #F59E0B;
+    /* Alerts, limited offers */
+    --error-red: #EF4444;
+    /* Errors, urgency */
+    --info-blue: #3B82F6;
+    /* Information, tips */
+
+    /* Interactive States */
+    --hover-gold: rgba(212, 175, 55, 0.2);
+    --active-gold: rgba(212, 175, 55, 0.3);
+    --focus-gold: rgba(212, 175, 55, 0.4);
+
+    /* Typography Scale - Conversion Optimized */
+    --font-family-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-family-display: 'Inter', system-ui, sans-serif;
+
+    /* Spacing System */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-2xl: 3rem;
+    --spacing-3xl: 4rem;
+
+    /* Border Radius */
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+    --radius-2xl: 24px;
+
+    /* Shadows - Premium Depth */
+    --shadow-sm: 0 1px 2px rgba(0, 31, 63, 0.1);
+    --shadow-md: 0 4px 6px rgba(0, 31, 63, 0.15);
+    --shadow-lg: 0 10px 15px rgba(0, 31, 63, 0.2);
+    --shadow-xl: 0 20px 25px rgba(0, 31, 63, 0.25);
+    --shadow-2xl: 0 25px 50px rgba(0, 31, 63, 0.3);
+
+    /* Transitions */
+    --transition-fast: 0.15s ease;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s ease;
+}
+
+/* Global Base Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-family-primary);
+    background: var(--gradient-primary);
+    color: var(--neutral-white);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Enhanced Calculator Styles */
+.calculator-container {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    border: 2px solid rgba(212, 175, 55, 0.3);
+    border-radius: var(--radius-2xl);
+    padding: var(--spacing-2xl);
+    margin: var(--spacing-xl) auto;
+    max-width: 800px;
+    box-shadow: var(--shadow-2xl);
+    position: relative;
+    overflow: hidden;
+}
+
+.calculator-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--gradient-gold);
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+}
+
+.calculator-title {
+    background: var(--gradient-gold);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: var(--spacing-md);
+    letter-spacing: -0.02em;
+}
+
+/* Premium Input Styling */
+.input-group {
+    margin-bottom: var(--spacing-lg);
+}
+
+.input-group label {
+    display: block;
+    color: var(--accent-gold);
+    font-weight: 600;
+    margin-bottom: var(--spacing-sm);
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.input-group input,
+.input-group select {
+    width: 100%;
+    padding: var(--spacing-md) var(--spacing-lg);
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(212, 175, 55, 0.3);
+    border-radius: var(--radius-lg);
+    color: var(--neutral-white);
+    font-size: 1.1rem;
+    font-weight: 500;
+    transition: all var(--transition-normal);
+}
+
+.input-group input:focus,
+.input-group select:focus {
+    outline: none;
+    border-color: var(--accent-gold);
+    background: rgba(212, 175, 55, 0.1);
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
+    transform: translateY(-1px);
+}
+
+/* Calculate Button - Premium CTA */
+.calculate-button {
+    width: 100%;
+    padding: var(--spacing-lg) var(--spacing-xl);
+    background: var(--gradient-gold);
+    border: none;
+    border-radius: var(--radius-xl);
+    color: var(--primary-navy);
+    font-size: 1.3rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    overflow: hidden;
+}
+
+.calculate-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+.calculate-button:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-xl);
+}
+
+.calculate-button:hover::before {
+    left: 100%;
+}
+
+.calculate-button:active {
+    transform: translateY(-1px);
+}
+
+/* Results Display - Revenue Focus */
+.calculator-results {
+    margin-top: var(--spacing-2xl);
+    display: grid;
+    gap: var(--spacing-lg);
+}
+
+.result-card {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-xl);
+    backdrop-filter: blur(10px);
+    transition: all var(--transition-normal);
+}
+
+.result-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent-gold);
+    box-shadow: var(--shadow-lg);
+}
+
+.result-card h3 {
+    color: var(--accent-gold);
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: var(--spacing-md);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.value-amount {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--premium-gold);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Premium Features Highlight */
+.premium-upsell {
+    margin-top: var(--spacing-lg);
+    padding: var(--spacing-lg);
+    background: rgba(212, 175, 55, 0.1);
+    border: 2px dashed var(--accent-gold);
+    border-radius: var(--radius-lg);
+    text-align: center;
+}
+
+.premium-button {
+    background: var(--gradient-premium);
+    color: var(--primary-navy);
+    border: none;
+    padding: var(--spacing-md) var(--spacing-xl);
+    border-radius: var(--radius-lg);
+    font-weight: 600;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.premium-button:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .calculator-container {
+        margin: var(--spacing-md);
+        padding: var(--spacing-lg);
+    }
+
+    .calculator-title {
+        font-size: 2rem;
+    }
+
+    .value-amount {
+        font-size: 2rem;
+    }
+}
+
+/* Engagement Animations */
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+@keyframes glow {
+
+    0%,
+    100% {
+        box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+    }
+
+    50% {
+        box-shadow: 0 0 40px rgba(212, 175, 55, 0.6);
+    }
+}
+
+.pulse-animation {
+    animation: pulse 2s infinite;
+}
+
+.glow-animation {
+    animation: glow 3s infinite;
+}

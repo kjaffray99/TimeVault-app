@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>TimeVault Revenue Systems Test</title>
+    <meta charset="utf-8">
+    <script>
+        function testRevenueSystems() {
+            // Test if revenue components are loaded
+            const tests = {
+                liveMetrics: document.querySelector('[data-testid="live-metrics"]') !== null,
+                urgentConversion: document.querySelector('[data-testid="urgent-conversion"]') !== null,
+                premiumCheckout: document.querySelector('[data-testid="premium-checkout"]') !== null,
+                calculationsDisplay: document.body.textContent.includes('247') || document.body.textContent.includes('calculations')
+            };
+
+            console.log('Revenue Systems Test Results:', tests);
+            return tests;
+        }
+
+        window.addEventListener('load', function () {
+            setTimeout(testRevenueSystems, 2000);
+        });
+    </script>
+</head>
+
+<body>
+    <h1>Revenue Systems Test Page</h1>
+    <p>This page will redirect to the main site and test revenue components.</p>
+    <script>
+        setTimeout(function () {
+            window.location.href = '/';
+        }, 1000);
+    </script>
+</body>
+
+</html>

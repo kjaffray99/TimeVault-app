@@ -1,11 +1,260 @@
 /**
- * API Hook for TimeVault MVP
- * Manages crypto and metals price data with caching and error handling
+ * Enhanced API Hook for TimeVault - Optimized for Revenue Performance
+ * Integrates optimizedAPI service with advanced caching and performance monitoring
  */
 
-import axios from 'axios';
 import { useCallback, useEffect, useState } from 'react';
+import { optimizedAPI } from '../services/optimizedAPI';
 import type { CryptoAsset, PreciousMetalPrice } from '../types';
+
+interface ApiState {
+    cryptoPrices: CryptoAsset[];
+    metalPrices: PreciousMetalPrice[];
+    isLoading: boolean;
+    error: string | null;
+    lastFetch: number;
+    performanceMetrics: {
+        avgResponseTime: number;
+        cacheHitRate: number;
+        errorRate: number;
+        apiHealth: 'excellent' | 'good' | 'degraded' | 'critical';
+    };
+    cacheAge: number;
+}
+
+export const useApi = () => {
+    const [state, setState] = useState<ApiState>({
+        cryptoPrices: [],
+        metalPrices: [],
+        isLoading: true,
+        error: null,
+        lastFetch: 0,
+        performanceMetrics: {
+            avgResponseTime: 0,
+            cacheHitRate: 0,
+            errorRate: 0,
+            apiHealth: 'good'
+        },
+        cacheAge: 0
+    });
+
+    const fetchData = useCallback(async () => {
+        const startTime = performance.now();
+
+        try {
+            setState(prev => ({ ...prev, isLoading: true, error: null }));
+
+            // Use optimized API service with intelligent caching
+            const [cryptoData, metalData] = await Promise.all([
+                optimizedAPI.getCryptoPrices(['bitcoin', 'ethereum', 'litecoin']),
+                optimizedAPI.getMetalPrices(['gold', 'silver', 'platinum', 'palladium'])
+            ]);
+
+            const endTime = performance.now();
+            const responseTime = endTime - startTime;
+
+            // Transform data to match expected types
+            const cryptoPrices: CryptoAsset[] = Object.entries(cryptoData).map(([id, data]) => ({
+                id,
+                symbol: id.toUpperCase(),
+                name: id.charAt(0).toUpperCase() + id.slice(1),
+                current_price: data.usd || 0,
+                market_cap: data.market_cap || 0,
+                price_change_percentage_24h: data.price_change_24h || 0,
+                volume_24h: data.volume_24h || 0,
+                circulating_supply: data.circulating_supply || 0,
+                image: `https://assets.coingecko.com/coins/images/${data.image_id || 1}/thumb/${id}.png`
+            }));
+
+            const metalPrices: PreciousMetalPrice[] = Object.entries(metalData).map(([metal, data]) => ({
+                metal: metal as 'gold' | 'silver' | 'platinum' | 'palladium',
+                price: data.price || 0,
+                currency: 'USD',
+                unit: 'oz',
+                change_24h: data.change_24h || 0,
+                change_percentage_24h: data.change_percentage_24h || 0,
+                last_updated: new Date().toISOString()
+            }));
+
+            // Get cache info and performance metrics
+            const cacheInfo = optimizedAPI.getCacheInfo();
+            const performanceData = optimizedAPI.getPerformanceMetrics();
+
+            // Calculate API health status
+            const getApiHealth = (): 'excellent' | 'good' | 'degraded' | 'critical' => {
+                if (responseTime < 500 && performanceData.errorRate < 2) return 'excellent';
+                if (responseTime < 1500 && performanceData.errorRate < 10) return 'good';
+                if (responseTime < 3000 && performanceData.errorRate < 25) return 'degraded';
+                return 'critical';
+            };
+
+            setState(prev => ({
+                ...prev,
+                cryptoPrices,
+                metalPrices,
+                isLoading: false,
+                lastFetch: Date.now(),
+                performanceMetrics: {
+                    avgResponseTime: (prev.performanceMetrics.avgResponseTime + responseTime) / 2,
+                    cacheHitRate: cacheInfo.hitRate,
+                    errorRate: Math.max(0, prev.performanceMetrics.errorRate - 1), // Improve on success
+                    apiHealth: getApiHealth()
+                },
+                cacheAge: Date.now() - (cacheInfo.cryptoTimestamp || Date.now())
+            }));
+
+        } catch (error) {
+            console.error('API fetch error:', error);
+
+            setState(prev => ({
+                ...prev,
+                isLoading: false,
+                error: error instanceof Error ? error.message : 'Failed to fetch data',
+                performanceMetrics: {
+                    ...prev.performanceMetrics,
+                    errorRate: Math.min(100, prev.performanceMetrics.errorRate + 5),
+                    apiHealth: 'degraded'
+                }
+            }));
+
+            // Attempt to use fallback data
+            try {
+                const fallbackData = optimizedAPI.getFallbackData();
+
+                const fallbackCrypto: CryptoAsset[] = Object.entries(fallbackData.crypto).map(([id, price]) => ({
+                    id,
+                    symbol: id.toUpperCase(),
+                    name: id.charAt(0).toUpperCase() + id.slice(1),
+                    current_price: price,
+                    market_cap: price * 19000000, // Estimated
+                    price_change_percentage_24h: 0,
+                    volume_24h: price * 1000000, // Estimated
+                    circulating_supply: 19000000, // Estimated
+                    image: `https://assets.coingecko.com/coins/images/1/thumb/${id}.png`
+                }));
+
+                const fallbackMetals: PreciousMetalPrice[] = Object.entries(fallbackData.metals).map(([metal, price]) => ({
+                    metal: metal as 'gold' | 'silver' | 'platinum' | 'palladium',
+                    price,
+                    currency: 'USD',
+                    unit: 'oz',
+                    change_24h: 0,
+                    change_percentage_24h: 0,
+                    last_updated: new Date().toISOString()
+                }));
+
+                setState(prev => ({
+                    ...prev,
+                    cryptoPrices: fallbackCrypto,
+                    metalPrices: fallbackMetals,
+                    error: 'Using cached data - limited functionality'
+                }));
+            } catch (fallbackError) {
+                console.error('Fallback data error:', fallbackError);
+            }
+        }
+    }, []);
+
+    // Intelligent refresh strategy
+    useEffect(() => {
+        // Initial fetch
+        fetchData();
+
+        // Preload data for better performance
+        optimizedAPI.preloadData();
+
+        // Dynamic refresh interval based on performance
+        const getRefreshInterval = () => {
+            const { apiHealth, cacheHitRate } = state.performanceMetrics;
+
+            switch (apiHealth) {
+                case 'excellent':
+                    return cacheHitRate > 80 ? 60000 : 30000; // 1 min or 30s
+                case 'good':
+                    return 45000; // 45 seconds
+                case 'degraded':
+                    return 90000; // 1.5 minutes
+                case 'critical':
+                    return 180000; // 3 minutes
+                default:
+                    return 60000;
+            }
+        };
+
+        const interval = setInterval(fetchData, getRefreshInterval());
+
+        return () => clearInterval(interval);
+    }, [fetchData, state.performanceMetrics.apiHealth]);
+
+    // Performance monitoring methods
+    const getPerformanceStatus = useCallback(() => {
+        const { avgResponseTime, cacheHitRate, errorRate, apiHealth } = state.performanceMetrics;
+
+        return {
+            status: apiHealth,
+            details: {
+                responseTime: `${Math.round(avgResponseTime)}ms`,
+                cacheEfficiency: `${Math.round(cacheHitRate)}%`,
+                reliability: `${Math.round(100 - errorRate)}%`,
+                recommendations: getOptimizationRecommendations(apiHealth)
+            }
+        };
+    }, [state.performanceMetrics]);
+
+    const getOptimizationRecommendations = (health: string): string[] => {
+        switch (health) {
+            case 'critical':
+                return [
+                    'Enable offline mode',
+                    'Increase cache duration',
+                    'Use fallback data sources'
+                ];
+            case 'degraded':
+                return [
+                    'Reduce API call frequency',
+                    'Implement request batching',
+                    'Check network connectivity'
+                ];
+            case 'good':
+                return [
+                    'Consider CDN implementation',
+                    'Optimize cache strategies'
+                ];
+            default:
+                return ['Performance is optimal'];
+        }
+    };
+
+    // Force refresh method for manual updates
+    const forceRefresh = useCallback(() => {
+        optimizedAPI.clearCache();
+        fetchData();
+    }, [fetchData]);
+
+    // Cache management methods
+    const getCacheStatus = useCallback(() => {
+        const cacheInfo = optimizedAPI.getCacheInfo();
+        return {
+            age: Date.now() - (cacheInfo.cryptoTimestamp || Date.now()),
+            hitRate: cacheInfo.hitRate,
+            size: cacheInfo.size || 0,
+            isStale: (Date.now() - (cacheInfo.cryptoTimestamp || 0)) > 300000 // 5 minutes
+        };
+    }, []);
+
+    return {
+        ...state,
+        refresh: fetchData,
+        forceRefresh,
+        getPerformanceStatus,
+        getCacheStatus,
+        // Legacy compatibility
+        cryptoPrices: state.cryptoPrices,
+        metalPrices: state.metalPrices,
+        loading: state.isLoading,
+        error: state.error
+    };
+};
 
 const API_CONFIG = {
     COINGECKO_BASE: import.meta.env.VITE_COINGECKO_API_URL || 'https://api.coingecko.com/api/v3',

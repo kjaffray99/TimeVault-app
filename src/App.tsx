@@ -6,16 +6,45 @@ import Dashboard from './components/Dashboard/Dashboard';
 import DebugTest from './components/DebugTest';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import Footer from './components/Footer/Footer';
+import GamificationEngine from './components/GamificationEngine';
 import Header from './components/Header/Header';
 import OptimizedPersonalTimeCalculator from './components/OptimizedPersonalTimeCalculator';
 import Premium from './components/Premium/Premium';
+import RevenueOptimizer from './components/RevenueOptimizer/RevenueOptimizer';
+// NEW: Import revenue-critical components
+import { InteractiveQuizEngine } from './components/InteractiveQuizEngine';
+import { PremiumUpsell } from './components/PremiumUpsell';
+// import { RevenueAnalytics } from './components/RevenueAnalytics';
+// DAY 3-5: Advanced components for viral growth and monetization
+import ABTestingEngine from './components/ABTestingEngine';
+import AdvancedAnalytics from './components/AdvancedAnalytics';
+import PaymentIntegration from './components/PaymentIntegration';
+import ViralGrowthEngine from './components/ViralGrowthEngine';
+// import MobileAppFoundation from './components/MobileAppFoundation';
+import AdvancedMonetizationEngine from './components/AdvancedMonetizationEngine';
 import { UserProvider } from './contexts';
 import { useAnalytics } from './hooks/useAnalytics';
+// import { useApiEnhanced } from './hooks/useApiEnhanced';
 import { monitoring } from './services/monitoringService';
 import './styles/day1-app.css';
+import './styles/enhanced-theme.css'; // Enhanced gold/blue theme
+import './styles/gold-blue-theme-main.css'; // Revenue-optimized theme
+// IMMEDIATE REVENUE ACTIVATION
+import LiveUserMetricsTracker from './components/LiveUserMetricsTracker';
+import UrgentConversionSystem, { useUrgentConversion } from './components/UrgentConversionSystem';
 
-// Revenue-critical fallback calculator
-const FallbackCalculator = () => (
+// Enhanced user engagement tracking
+// interface UserEngagement {
+//   quizzesTaken: number;
+//   calculationsPerformed: number;
+//   timeSpent: number;
+//   streakDays: number;
+//   tvltTokens: number;
+//   premiumInterest: number;
+// }
+
+// Revenue-critical fallback calculator with upsell hooks
+const FallbackCalculator = ({ onPremiumInterest }: { onPremiumInterest: () => void }) => (
   <div style={{
     background: 'linear-gradient(135deg, #001F3F 0%, #003366 100%)',
     color: '#D4AF37',
@@ -42,22 +71,38 @@ const FallbackCalculator = () => (
       <h3 style={{ marginBottom: '1rem' }}>🚧 Revenue Engine Loading...</h3>
       <p>Premium calculator features initializing for immediate profit generation</p>
     </div>
-    <button
-      onClick={() => window.location.reload()}
-      style={{
-        background: '#D4AF37',
-        color: '#001F3F',
-        border: 'none',
-        padding: '1rem 2rem',
-        fontSize: '1.1rem',
-        borderRadius: '8px',
-        cursor: 'pointer',
-        fontWeight: 'bold',
-        margin: '0 auto'
-      }}
-    >
-      🔄 Load Calculator
-    </button>
+    <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+      <button
+        onClick={() => window.location.reload()}
+        style={{
+          background: '#D4AF37',
+          color: '#001F3F',
+          border: 'none',
+          padding: '1rem 2rem',
+          fontSize: '1.1rem',
+          borderRadius: '8px',
+          cursor: 'pointer',
+          fontWeight: 'bold'
+        }}
+      >
+        🔄 Load Calculator
+      </button>
+      <button
+        onClick={onPremiumInterest}
+        style={{
+          background: 'rgba(255, 255, 255, 0.2)',
+          color: '#D4AF37',
+          border: '2px solid #D4AF37',
+          padding: '1rem 2rem',
+          fontSize: '1.1rem',
+          borderRadius: '8px',
+          cursor: 'pointer',
+          fontWeight: 'bold'
+        }}
+      >
+        👑 Get Premium Access
+      </button>
+    </div>
   </div>
 );
 
@@ -69,6 +114,24 @@ function App() {
   const [complianceAccepted, setComplianceAccepted] = useState(false);
   const [activeTab, setActiveTab] = useState<'calculator' | 'dashboard' | 'premium'>('calculator');
   const [debugMode, setDebugMode] = useState(false);
+
+  // IMMEDIATE REVENUE ACTIVATION: Urgent conversion system
+  const { showOffer, setShowOffer, calculationValue, triggerOffer, handlePremiumSignup } = useUrgentConversion();
+
+  // DAY 3-5: Advanced state management for viral growth and monetization
+  const [userMetrics, setUserMetrics] = useState({
+    totalReferrals: 7,
+    monthlyRevenue: 2450,
+    lifetimeValue: 8900,
+    calculationsPerformed: 45,
+    quizzesTaken: 12,
+    tvltTokens: 750,
+    premiumStatus: false,
+    timeSpent: 0,
+    streakDays: 0
+  });
+  const [currentPlan, setCurrentPlan] = useState('free');
+  const [analyticsTimeRange] = useState<'7d' | '30d' | '90d'>('30d');
 
   console.log('📊 App state:', { showCompliance, complianceAccepted, activeTab });
 
@@ -88,20 +151,24 @@ function App() {
     }
 
     // Check if compliance was previously accepted
-    const accepted = localStorage.getItem('timevault_compliance_accepted');
-    console.log('💾 Compliance accepted from localStorage:', accepted);
-    if (!accepted) {
-      setShowCompliance(true);
-      console.log('⚠️ Showing compliance modal');
-    } else {
-      setComplianceAccepted(true);
-      console.log('✅ Compliance already accepted');
+    if (typeof window !== 'undefined') {
+      const accepted = localStorage.getItem('timevault_compliance_accepted');
+      console.log('💾 Compliance accepted from localStorage:', accepted);
+      if (!accepted) {
+        setShowCompliance(true);
+        console.log('⚠️ Showing compliance modal');
+      } else {
+        setComplianceAccepted(true);
+        console.log('✅ Compliance already accepted');
+      }
     }
 
   }, []);
 
   const handleComplianceAccept = () => {
-    localStorage.setItem('timevault_compliance_accepted', 'true');
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('timevault_compliance_accepted', 'true');
+    }
     setComplianceAccepted(true);
     setShowCompliance(false);
     track('compliance_accepted', { timestamp: new Date().toISOString() });
@@ -165,74 +232,146 @@ function App() {
             timestamp: {new Date().toLocaleTimeString()}
           </div>
 
-          {/* Always show loading state if nothing else */}
-          {!shouldShowApp && !showCompliance && (
-            <div style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              minHeight: '100vh',
-              flexDirection: 'column'
-            }}>
-              <div style={{
-                fontSize: '3rem',
-                color: '#D4AF37',
-                marginBottom: '1rem',
-                fontWeight: 'bold'
-              }}>
-                TimeVault
-              </div>
-              <div style={{ fontSize: '1.2rem', color: '#C0C0C0' }}>
-                Loading digital asset calculator...
-              </div>
-            </div>
+          {/* Always show Header and main app - compliance modal will overlay if needed */}
+          <Header
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+          />
+
+          <main className="container mx-auto px-4 py-8" style={{ minHeight: '60vh' }}>
+            {/* IMMEDIATE REVENUE ACTIVATION: Live metrics to show social proof */}
+            <LiveUserMetricsTracker />
+
+            <ErrorBoundary>
+              {activeTab === 'calculator' && (
+                <React.Suspense fallback={<FallbackCalculator onPremiumInterest={() => setActiveTab('premium')} />}>
+                  <div>
+                    <Calculator />
+                    <GamificationEngine />
+                    <OptimizedPersonalTimeCalculator
+                      onShare={(result) => {
+                        track('optimized_calculator_share', {
+                          crypto_value: result.cryptoValue,
+                          hours_of_work: result.hoursOfWork
+                        });
+
+                        // REVENUE CRITICAL: Trigger urgent conversion for high-value calculations
+                        if (result.cryptoValue > 1000) {
+                          triggerOffer(result.cryptoValue);
+                        }
+                      }}
+                      onPremiumTrigger={(trigger) => {
+                        track('premium_trigger', { trigger });
+                        setActiveTab('premium');
+                      }}
+                    />
+
+                    {/* DAY 3-5: Advanced Revenue Components */}
+                    <ViralGrowthEngine
+                      onShareGenerated={(shareData) => {
+                        track('viral_share_generated', { type: shareData.type });
+                        setUserMetrics(prev => ({ ...prev, totalReferrals: prev.totalReferrals + 1 }));
+                      }}
+                      onReferralCreated={(code) => track('referral_code_created', { code })}
+                      userStats={userMetrics}
+                    />
+
+                    <AdvancedMonetizationEngine
+                      currentPlan={currentPlan}
+                      onUpgrade={(planId) => {
+                        setCurrentPlan(planId);
+                        track('plan_upgraded', { from: currentPlan, to: planId });
+                      }}
+                      onAffiliateJoin={(program) => track('affiliate_program_joined', { program })}
+                      userMetrics={userMetrics}
+                    />
+
+                    <InteractiveQuizEngine
+                      onRewardEarned={(amount) => {
+                        track('quiz_reward_earned', { amount });
+                        setUserMetrics(prev => ({
+                          ...prev,
+                          quizzesTaken: prev.quizzesTaken + 1,
+                          tvltTokens: prev.tvltTokens + amount
+                        }));
+                      }}
+                      onPremiumInterest={() => setActiveTab('premium')}
+                    />
+
+                    <PremiumUpsell
+                      isOpen={true}
+                      onClose={() => setActiveTab('calculator')}
+                      trigger="manual"
+                      userEngagement={{
+                        quizzesTaken: userMetrics.quizzesTaken,
+                        calculationsPerformed: userMetrics.calculationsPerformed,
+                        timeSpent: userMetrics.timeSpent,
+                        streakDays: userMetrics.streakDays
+                      }}
+                      onUpgrade={(tier) => {
+                        track('premium_upgrade', { plan: tier });
+                        setActiveTab('premium');
+                      }}
+                    />
+                  </div>
+                </React.Suspense>
+              )}
+              {activeTab === 'dashboard' && (
+                <React.Suspense fallback={<div style={{ textAlign: 'center', color: '#D4AF37', padding: '2rem' }}>Loading Dashboard...</div>}>
+                  <Dashboard />
+                  <AdvancedAnalytics
+                    timeRange={analyticsTimeRange}
+                    onExportData={() => track('analytics_data_exported')}
+                    onAlertTriggered={(alert) => track('analytics_alert_triggered', alert)}
+                  />
+                  <ABTestingEngine
+                    onVariantAssigned={(variant) => track('ab_test_assigned', { variant: variant.name })}
+                    onConversionEvent={(event, value) => track('ab_test_conversion', { event, value: value || 0 })}
+                  />
+                </React.Suspense>
+              )}
+              {activeTab === 'premium' && (
+                <React.Suspense fallback={<div style={{ textAlign: 'center', color: '#D4AF37', padding: '2rem' }}>Loading Premium Features...</div>}>
+                  <Premium />
+                  <PaymentIntegration
+                    selectedTier={{
+                      id: currentPlan,
+                      name: currentPlan.charAt(0).toUpperCase() + currentPlan.slice(1),
+                      price: currentPlan === 'premium' ? 29.99 : 99.99,
+                      period: 'monthly',
+                      features: []
+                    }}
+                    onPaymentSuccess={(details) => {
+                      track('payment_successful', details);
+                      setUserMetrics(prev => ({
+                        ...prev,
+                        premiumStatus: true,
+                        monthlyRevenue: prev.monthlyRevenue + details.amount
+                      }));
+                    }}
+                    onPaymentError={(error) => track('payment_error', { error })}
+                  />
+                </React.Suspense>
+              )}
+              {debugMode && (
+                <React.Suspense fallback={<div style={{ textAlign: 'center', color: '#D4AF37', padding: '2rem' }}>Loading Revenue Analytics...</div>}>
+                  <RevenueOptimizer />
+                </React.Suspense>
+              )}
+            </ErrorBoundary>
+          </main>
+
+          <Footer />
+
+          {/* IMMEDIATE REVENUE ACTIVATION: Urgent conversion system */}
+          {showOffer && (
+            <UrgentConversionSystem
+              calculationValue={calculationValue}
+              onPremiumSignup={handlePremiumSignup}
+            />
           )}
 
-          {shouldShowApp && (
-            <>
-              <Header
-                activeTab={activeTab}
-                setActiveTab={setActiveTab}
-              />
-
-              <main className="container mx-auto px-4 py-8" style={{ minHeight: '60vh' }}>
-                <ErrorBoundary>
-                  {activeTab === 'calculator' && (
-                    <React.Suspense fallback={<FallbackCalculator />}>
-                      <div>
-                        <Calculator />
-                        <OptimizedPersonalTimeCalculator
-                          onShare={(result) => {
-                            track('optimized_calculator_share', {
-                              crypto_value: result.cryptoValue,
-                              hours_of_work: result.hoursOfWork
-                            });
-                          }}
-                          onPremiumTrigger={(trigger) => {
-                            track('premium_trigger', { trigger });
-                            setActiveTab('premium');
-                          }}
-                        />
-                      </div>
-                    </React.Suspense>
-                  )}
-                  {activeTab === 'dashboard' && (
-                    <React.Suspense fallback={<div style={{ textAlign: 'center', color: '#D4AF37', padding: '2rem' }}>Loading Dashboard...</div>}>
-                      <Dashboard />
-                    </React.Suspense>
-                  )}
-                  {activeTab === 'premium' && (
-                    <React.Suspense fallback={<div style={{ textAlign: 'center', color: '#D4AF37', padding: '2rem' }}>Loading Premium Features...</div>}>
-                      <Premium />
-                    </React.Suspense>
-                  )}
-                </ErrorBoundary>
-              </main>
-
-              <Footer />
-            </>
-          )}
-
+          {/* Compliance modal overlays the app when needed */}
           {showCompliance && (
             <ComplianceModal
               isOpen={showCompliance}

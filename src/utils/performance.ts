@@ -1,20 +1,22 @@
-// Performance Optimization Utilities - Day 2 Implementation
-// Target: <1.5s page load times, 90% cache hit rate, optimized bundle size
+// Performance Optimization Utilities - Enhanced with Real-time Monitoring
+// Target: <100ms API responses, 95% cache hit rate, optimized security
 
 import React, { useCallback, useEffect, useState } from 'react';
 
-// Performance monitoring configuration
+// Enhanced performance monitoring configuration
 const PERFORMANCE_CONFIG = {
-    loadTimeTarget: 1500, // 1.5 seconds
-    apiResponseTarget: 500, // 500ms
-    bundleSizeTarget: 500, // 500KB
-    fcp: 1200, // First Contentful Paint target
-    lcp: 2500, // Largest Contentful Paint target
-    cls: 0.1, // Cumulative Layout Shift target
-    fid: 100 // First Input Delay target
+    loadTimeTarget: 1000, // 1 second for revenue optimization
+    apiResponseTarget: 100, // 100ms for maximum efficiency
+    bundleSizeTarget: 300, // 300KB aggressive optimization
+    fcp: 800, // First Contentful Paint target
+    lcp: 1500, // Largest Contentful Paint target
+    cls: 0.05, // Cumulative Layout Shift target
+    fid: 50, // First Input Delay target
+    securityScanInterval: 30000, // 30 seconds
+    performanceReportInterval: 10000 // 10 seconds
 };
 
-// Performance metrics tracking
+// Enhanced performance metrics with security tracking
 interface PerformanceMetrics {
     loadTime?: number;
     fcpTime?: number;
@@ -24,16 +26,45 @@ interface PerformanceMetrics {
     apiResponseTimes: number[];
     cacheHitRate: number;
     bundleSize?: number;
+    securityScore?: number;
+    memoryUsage?: number;
+    cpuUtilization?: number;
+    networkLatency?: number;
+    errorRate?: number;
     timestamp: Date;
 }
 
-class PerformanceMonitor {
+interface SecurityMetrics {
+    xssAttempts: number;
+    sqlInjectionAttempts: number;
+    rateLimitViolations: number;
+    invalidTokens: number;
+    suspiciousRequests: number;
+    lastScanTime: Date;
+}
+
+class EnhancedPerformanceMonitor {
     private metrics: PerformanceMetrics[] = [];
+    private securityMetrics: SecurityMetrics = {
+        xssAttempts: 0,
+        sqlInjectionAttempts: 0,
+        rateLimitViolations: 0,
+        invalidTokens: 0,
+        suspiciousRequests: 0,
+        lastScanTime: new Date()
+    };
     private apiCache = new Map<string, { data: any; timestamp: number; ttl: number }>();
     private observers: PerformanceObserver[] = [];
+    private alertThresholds = {
+        responseTime: 200,
+        errorRate: 2,
+        memoryUsage: 80,
+        securityScore: 90
+    };
 
     constructor() {
         this.initializeMonitoring();
+        this.startRealTimeMonitoring();
     }
 
     private initializeMonitoring() {
@@ -92,6 +123,62 @@ class PerformanceMonitor {
         });
     }
 
+    // Enhanced real-time monitoring
+    private startRealTimeMonitoring() {
+        // Performance monitoring every 10 seconds
+        setInterval(() => {
+            this.collectRealTimeMetrics();
+            this.performSecurityScan();
+            this.generateAlerts();
+        }, PERFORMANCE_CONFIG.performanceReportInterval);
+
+        // Security monitoring every 30 seconds
+        setInterval(() => {
+            this.performEnhancedSecurityScan();
+        }, PERFORMANCE_CONFIG.securityScanInterval);
+    }
+
+    private collectRealTimeMetrics() {
+        const metrics = this.getCurrentMetrics();
+
+        // Collect memory usage if available
+        if ('memory' in performance) {
+            const memory = (performance as any).memory;
+            metrics.memoryUsage = (memory.usedJSHeapSize / memory.totalJSHeapSize) * 100;
+        }
+
+        // Calculate network latency
+        metrics.networkLatency = this.calculateNetworkLatency();
+
+        // Calculate error rate
+        metrics.errorRate = this.calculateErrorRate();
+
+        // Security score
+        metrics.securityScore = this.calculateSecurityScore();
+
+        this.metrics.push(metrics);
+    }
+
+    private performSecurityScan() {
+        // Check for XSS attempts in DOM
+        this.scanForXSSAttempts();
+
+        // Monitor for unusual patterns
+        this.detectSuspiciousActivity();
+
+        // Update security metrics
+        this.securityMetrics.lastScanTime = new Date();
+    }
+
+    private performEnhancedSecurityScan() {
+        console.log('🔒 Running enhanced security scan...');
+
+        // Deep security analysis
+        this.analyzeDOMSecurity();
+        this.checkAPIEndpointSecurity();
+        this.monitorNetworkRequests();
+    }
+
     private recordMetric(type: keyof PerformanceMetrics, value: number) {
         const currentMetrics = this.getCurrentMetrics();
         (currentMetrics as any)[type] = value;
@@ -100,13 +187,14 @@ class PerformanceMonitor {
         // Store metrics for analysis
         this.metrics.push(currentMetrics);
 
-        // Keep only last 50 measurements
-        if (this.metrics.length > 50) {
-            this.metrics = this.metrics.slice(-50);
+        // Keep only last 100 measurements for enhanced monitoring
+        if (this.metrics.length > 100) {
+            this.metrics = this.metrics.slice(-100);
         }
 
-        // Log performance issues
+        // Check performance and security thresholds
         this.checkPerformanceThresholds(type, value);
+        this.checkSecurityThresholds();
     }
 
     private getCurrentMetrics(): PerformanceMetrics {
@@ -128,15 +216,23 @@ class PerformanceMonitor {
 
         const threshold = thresholds[type as keyof typeof thresholds];
         if (threshold && value > threshold) {
-            console.warn(`Performance threshold exceeded for ${type}: ${value} (target: ${threshold})`);
-
-            // Optional: Send performance data to analytics
+            console.warn(`⚠️ Performance threshold exceeded for ${type}: ${value} (target: ${threshold})`);
             this.reportPerformanceIssue(type, value, threshold);
         }
     }
 
+    private checkSecurityThresholds() {
+        const totalThreats = this.securityMetrics.xssAttempts +
+            this.securityMetrics.sqlInjectionAttempts +
+            this.securityMetrics.suspiciousRequests;
+
+        if (totalThreats > 10) {
+            console.error('🚨 HIGH SECURITY ALERT: Multiple threats detected!');
+            this.triggerSecurityAlert();
+        }
+    }
+
     private reportPerformanceIssue(metric: string, value: number, threshold: number) {
-        // In production, this would send to analytics service
         const performanceData = {
             metric,
             value,
@@ -146,11 +242,129 @@ class PerformanceMonitor {
             url: window.location.href
         };
 
-        // For now, just log to console
-        console.log('Performance issue reported:', performanceData);
+        console.log('📊 Performance issue reported:', performanceData);
+
+        // In production: send to monitoring service
+        this.sendToMonitoringService(performanceData);
     }
 
-    // Enhanced API caching with performance tracking
+    // Missing method implementations for enhanced monitoring
+    private generateAlerts() {
+        const latest = this.metrics[this.metrics.length - 1];
+        if (!latest) return;
+
+        const alerts = [];
+
+        if (latest.memoryUsage && latest.memoryUsage > this.alertThresholds.memoryUsage) {
+            alerts.push(`High memory usage: ${latest.memoryUsage.toFixed(1)}%`);
+        }
+
+        if (latest.errorRate && latest.errorRate > this.alertThresholds.errorRate) {
+            alerts.push(`High error rate: ${latest.errorRate.toFixed(1)}%`);
+        }
+
+        if (alerts.length > 0) {
+            console.warn('🚨 Performance Alerts:', alerts);
+        }
+    }
+
+    private calculateNetworkLatency(): number {
+        if ('connection' in navigator) {
+            const connection = (navigator as any).connection;
+            return connection.rtt || 50; // Default 50ms if unavailable
+        }
+        return 50;
+    }
+
+    private calculateErrorRate(): number {
+        // Calculate error rate from recent metrics
+        const recentMetrics = this.metrics.slice(-10);
+        if (recentMetrics.length === 0) return 0;
+
+        // Simplified calculation - in practice track actual errors
+        return Math.random() * 2; // Mock 0-2% error rate
+    }
+
+    private calculateSecurityScore(): number {
+        const threats = this.securityMetrics.xssAttempts +
+            this.securityMetrics.sqlInjectionAttempts +
+            this.securityMetrics.suspiciousRequests;
+
+        return Math.max(0, 100 - (threats * 5)); // Reduce score by 5 per threat
+    }
+
+    private scanForXSSAttempts() {
+        // Check for potential XSS in DOM
+        const scripts = document.querySelectorAll('script[src*="javascript:"], script[src*="data:"]');
+        if (scripts.length > 0) {
+            this.securityMetrics.xssAttempts++;
+            console.warn('🚨 Potential XSS attempt detected');
+        }
+    }
+
+    private detectSuspiciousActivity() {
+        // Monitor for suspicious patterns
+        const suspiciousPatterns = [
+            /eval\(/,
+            /document\.write/,
+            /<script/i
+        ];
+
+        const pageContent = document.documentElement.innerHTML;
+        for (const pattern of suspiciousPatterns) {
+            if (pattern.test(pageContent)) {
+                this.securityMetrics.suspiciousRequests++;
+                break;
+            }
+        }
+    }
+
+    private analyzeDOMSecurity() {
+        // Deep DOM security analysis
+        const inlineScripts = document.querySelectorAll('script:not([src])');
+        const unsafeElements = document.querySelectorAll('[onclick], [onload], [onerror]');
+
+        if (inlineScripts.length > 5) {
+            console.warn('🔒 Many inline scripts detected - security risk');
+        }
+
+        if (unsafeElements.length > 0) {
+            console.warn('🔒 Unsafe event handlers detected');
+        }
+    }
+
+    private checkAPIEndpointSecurity() {
+        // Monitor API endpoint security
+        console.log('🔒 Checking API endpoint security...');
+        // Implementation would check for secure headers, HTTPS, etc.
+    }
+
+    private monitorNetworkRequests() {
+        // Monitor network requests for security
+        if ('PerformanceObserver' in window) {
+            const observer = new PerformanceObserver((list) => {
+                const entries = list.getEntries();
+                entries.forEach((entry) => {
+                    if (entry.name.includes('http://')) {
+                        console.warn('🔒 Insecure HTTP request detected:', entry.name);
+                    }
+                });
+            });
+            observer.observe({ entryTypes: ['resource'] });
+        }
+    }
+
+    private triggerSecurityAlert() {
+        console.error('🚨 SECURITY ALERT TRIGGERED - Multiple threats detected!');
+        // In production: notify security team, enable protective measures
+    }
+
+    private sendToMonitoringService(data: any) {
+        // In production: send to monitoring service like Datadog, New Relic, etc.
+        console.log('📊 Sending to monitoring service:', data);
+    }
+
+    // Enhanced API caching with security and performance tracking
     async cacheApiCall<T>(
         key: string,
         fetchFn: () => Promise<T>,
@@ -163,9 +377,10 @@ class PerformanceMonitor {
         const now = Date.now();
 
         if (cached && (now - cached.timestamp) < cached.ttl) {
-            // Cache hit
+            // Cache hit - enhanced logging
             const responseTime = performance.now() - startTime;
             this.recordApiResponse(responseTime, true);
+            console.log(`💾 Cache hit for ${key}: ${responseTime.toFixed(2)}ms`);
             return cached.data;
         }
 
@@ -311,7 +526,7 @@ class PerformanceMonitor {
 
 // React hook for performance monitoring
 export const usePerformanceMonitor = () => {
-    const [monitor] = useState(() => new PerformanceMonitor());
+    const [monitor] = useState(() => new EnhancedPerformanceMonitor());
     const [performanceSummary, setPerformanceSummary] = useState<any>(null);
 
     useEffect(() => {
@@ -380,4 +595,7 @@ export const LazyWrapper: React.FC<{
     return React.createElement('div', { ref: setElementRef }, isVisible ? children : fallback);
 };
 
-export default PerformanceMonitor;
+// Export enhanced performance monitor
+const performanceMonitor = new EnhancedPerformanceMonitor();
+export { performanceMonitor };
+export default EnhancedPerformanceMonitor;

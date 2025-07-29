@@ -13,10 +13,12 @@ export default defineConfig({
     sourcemap: false, // Disable source maps in production for security and size
     minify: 'terser', // Better minification
     target: 'es2020', // Modern browsers only for smaller bundles
+    cssCodeSplit: true, // Enable CSS code splitting
+    chunkSizeWarningLimit: 500, // Warn on large chunks
     rollupOptions: {
       output: {
         manualChunks: {
-          // Core React chunk
+          // Core React chunk (critical - load first)
           'react-vendor': ['react', 'react-dom'],
 
           // Router chunk (lazy loaded)
@@ -25,13 +27,13 @@ export default defineConfig({
           // UI/Icons chunk
           'ui-components': ['lucide-react'],
 
-          // API/Network chunk
+          // API/Network chunk (critical for calculator)
           'api-vendor': ['axios'],
 
           // Crypto/Blockchain chunk (largest, separate loading)
           'crypto-vendor': ['@thirdweb-dev/sdk', '@thirdweb-dev/react'],
 
-          // Charts chunk (conditional loading)
+          // Charts chunk (conditional loading for premium)
           'charts': ['recharts']
         },
         chunkFileNames: () => {

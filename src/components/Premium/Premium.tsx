@@ -1,7 +1,7 @@
 /**
  * Premium Subscription Component - REVENUE CORE ⭐
  * Target: $200-400/month from subscriptions
- * Enhanced with Stripe webhooks and conversion optimization
+ * Enhanced with A/B testing and conversion optimization
  */
 
 import { Bell, Check, CreditCard, Crown, PieChart, Sparkles, TrendingUp, Zap, type LucideIcon } from 'lucide-react';
@@ -9,6 +9,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { ANALYTICS_EVENTS } from '../../constants/index';
 import { useUser } from '../../contexts';
 import { useAnalytics } from '../../hooks/useAnalytics';
+// import { usePremiumPricing, usePremiumCTA } from '../../services/ABTestingEngine'; // Ready for A/B testing
 import './Premium.css';
 
 interface PremiumFeature {
@@ -39,6 +40,12 @@ const Premium: React.FC = () => {
   const [stripeLoading, setStripeLoading] = useState(false);
   const [urgencyTimer, setUrgencyTimer] = useState(600); // 10 minutes countdown
   const [showLimitedOffer, setShowLimitedOffer] = useState(true);
+
+  // A/B Testing Integration (Ready for implementation)
+  // const userId = `user_${Date.now()}`;
+  // Future A/B testing hooks will be implemented here
+  // const { variant: pricingVariant } = usePremiumPricing(userId);
+  // const { variant: ctaVariant } = usePremiumCTA(userId);
 
   // Urgency countdown for conversion optimization
   useEffect(() => {
@@ -194,8 +201,10 @@ const Premium: React.FC = () => {
 
       // Update user state
       dispatch({ type: 'SET_PREMIUM', payload: true });
-      localStorage.setItem('timevault_premium_status', 'true');
-      localStorage.setItem('timevault_premium_plan', planId);
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('timevault_premium_status', 'true');
+        localStorage.setItem('timevault_premium_plan', planId);
+      }
 
       // Show success message
       alert(`🎉 Welcome to TimeVault Premium! Your ${planId} subscription is active. Check your email for NFT details.`);

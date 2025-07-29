@@ -82,7 +82,7 @@ export const TimeVaultThemeProvider: React.FC<TimeVaultThemeProviderProps> = ({
         let initialTheme = defaultTheme;
 
         // Load from localStorage if persistence is enabled
-        if (config.persistMode) {
+        if (config.persistMode && typeof window !== 'undefined') {
             const savedTheme = localStorage.getItem('timevault-theme');
             if (savedTheme) {
                 try {
@@ -94,7 +94,7 @@ export const TimeVaultThemeProvider: React.FC<TimeVaultThemeProviderProps> = ({
         }
 
         // Auto-detect system preference
-        if (config.autoDetectMode && !localStorage.getItem('timevault-theme')) {
+        if (config.autoDetectMode && typeof window !== 'undefined' && !localStorage.getItem('timevault-theme')) {
             const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
             initialTheme = prefersDark ? defaultDarkTheme : defaultLightTheme;
         }
@@ -131,7 +131,7 @@ export const TimeVaultThemeProvider: React.FC<TimeVaultThemeProviderProps> = ({
         applyTheme();
 
         // Persist theme if enabled
-        if (config.persistMode) {
+        if (config.persistMode && typeof window !== 'undefined') {
             localStorage.setItem('timevault-theme', JSON.stringify(theme));
         }
     }, [theme, config.persistMode]);
