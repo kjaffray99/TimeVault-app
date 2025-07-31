@@ -1,0 +1,92 @@
+{
+    "version": 2,
+    "name": "timevaultai-production",
+    "framework": "nextjs",
+    "buildCommand": "npm run build",
+    "outputDirectory": ".next",
+    "installCommand": "npm ci --prefer-offline",
+    "alias": [
+        "timevaultai.com",
+        "www.timevaultai.com"
+    ],
+    "regions": [
+        "iad1",
+        "sfo1",
+        "lhr1"
+    ],
+    "env": {
+        "SITE_URL": "https://timevaultai.com",
+        "NODE_ENV": "production",
+        "NEXT_TELEMETRY_DISABLED": "1"
+    },
+    "build": {
+        "env": {
+            "NODE_ENV": "production",
+            "NEXT_TELEMETRY_DISABLED": "1",
+            "NODE_OPTIONS": "--max-old-space-size=4096"
+        }
+    },
+    "functions": {
+        "pages/api/**/*.js": {
+            "memory": 1024,
+            "maxDuration": 30
+        },
+        "pages/api/crypto/**/*.js": {
+            "memory": 512,
+            "maxDuration": 15
+        }
+    },
+    "rewrites": [
+        {
+            "source": "/calculator",
+            "destination": "/"
+        },
+        {
+            "source": "/calc",
+            "destination": "/"
+        },
+        {
+            "source": "/sitemap.xml",
+            "destination": "/api/sitemap"
+        },
+        {
+            "source": "/robots.txt",
+            "destination": "/api/robots"
+        }
+    ],
+    "headers": [
+        {
+            "source": "/(.*)",
+            "headers": [
+                {
+                    "key": "X-Frame-Options",
+                    "value": "SAMEORIGIN"
+                },
+                {
+                    "key": "X-Content-Type-Options",
+                    "value": "nosniff"
+                },
+                {
+                    "key": "X-XSS-Protection",
+                    "value": "1; mode=block"
+                },
+                {
+                    "key": "Referrer-Policy",
+                    "value": "strict-origin-when-cross-origin"
+                }
+            ]
+        }
+    ],
+    "redirects": [
+        {
+            "source": "/timevault",
+            "destination": "/",
+            "permanent": true
+        },
+        {
+            "source": "/app",
+            "destination": "/",
+            "permanent": true
+        }
+    ]
+}

@@ -1,0 +1,26 @@
+{
+  "dependency_management": {
+    "weekly_updates": "npx npm-check-updates -u && npm install",
+    "security_audits": "npm audit fix --force (test after)",
+    "thirdweb_monitoring": "Track v5 updates for new features",
+    "tailwind_compatibility": "Monitor v4 plugin changes"
+  },
+  "build_verification": {
+    "pre_commit_hooks": "husky + lint-staged for build validation",
+    "local_testing": "Always run 'npm run build' before commits",
+    "cache_management": "Clear .next on dependency changes",
+    "environment_parity": "Keep local and Vercel env vars synced"
+  },
+  "revenue_monitoring": {
+    "performance_tracking": "Vercel Analytics for Core Web Vitals",
+    "user_engagement": "Track calculator usage and quiz completion",
+    "conversion_funnels": "Monitor Stripe subscription flow",
+    "nft_sales_tracking": "Thirdweb analytics for badge minting"
+  },
+  "ci_cd_pipeline": {
+    "github_actions": ".github/workflows/deploy.yml",
+    "automated_testing": "Build validation on every push",
+    "dependency_checks": "Fail on high/critical vulnerabilities",
+    "performance_budgets": "Enforce bundle size limits"
+  }
+}
