@@ -1,0 +1,56 @@
+name: TimeVault AI - Build & Deploy Verification
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [20]
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Verify PostCSS configuration
+      run: |
+        if [ ! -f "postcss.config.mjs" ] && [ ! -f "postcss.config.js" ]; then
+          echo "❌ PostCSS configuration missing"
+          exit 1
+        fi
+        echo "✅ PostCSS configuration found"
+        
+    - name: Check for required packages
+      run: |
+        npm ls @tailwindcss/postcss || (echo "❌ @tailwindcss/postcss missing" && exit 1)
+        echo "✅ Required PostCSS packages verified"
+        
+    - name: Build application
+      run: npm run build
+      env:
+        NODE_ENV: production
+        
+    - name: Security audit
+      run: npm audit --audit-level=high
+      continue-on-error: true
+      
+    - name: Bundle size check
+      run: |
+        if [ -d ".next/static/css" ]; then
+          CSS_SIZE=$(du -sh .next/static/css | cut -f1)
+          echo "📊 CSS bundle size: $CSS_SIZE"
+        fi
